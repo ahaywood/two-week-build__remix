@@ -1,33 +1,27 @@
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import Logout from "~/components/Logout";
 import { createSupabaseServerClient } from "~/supabase.server";
-import { supabaseAuth } from "~/utils/cookies";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // check for Supabase Cookies
-  const cookieHeader = request.headers.get("Cookie");
-  const auth = await supabaseAuth.parse(cookieHeader);
-  console.log({ auth });
-  // const accessToken = cookies.get("sb-access-token");
-  // const refreshToken = cookies.get("sb-refresh-token");
-
   // get the current Supabase user session
-  // const supabase = createSupabaseServerClient(request);
-  // const userResponse = await supabase.auth.getUser();
-
-  console.log({ auth });
-
-  // if (userResponse?.data?.user) {
-  //   return {
-  //     user: userResponse?.data?.user,
-  //     env: {
-  //       SUPABASE_URL: process.env.SUPABASE_URL!,
-  //       SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
-  //     },
-  //   };
-  // }
-  return {};
+  const supabase = createSupabaseServerClient(request);
+  const { data, error } = await supabase.auth.getUser();
+  if (error) console.error(error);
+  // if (data.user === null) return redirect("/login");
+  console.log({ data });
+  return { data };
 }
 
 export default function Me() {
-  return <div>Me</div>;
+  const { data } = useLoaderData();
+
+  return (
+    <div>
+      Hey {data.user?.email}
+      <p>
+        <Logout />
+      </p>
+    </div>
+  );
 }

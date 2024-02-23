@@ -3,12 +3,13 @@ import {
   json,
   redirect,
   type MetaFunction,
-  LoaderFunctionArgs,
-  createCookie,
 } from "@remix-run/node";
-import { Form } from "@remix-run/react";
-import { createSupabaseServerClient } from "~/supabase.server";
-import { supabaseAuth } from "~/utils/cookies";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
+import { RefObject, useRef } from "react";
+import {
+  CreateSupabaseBrowserClientType,
+  createSupabaseBrowserClient,
+} from "~/supabase.client";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,44 +18,46 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function action({ request }: ActionFunctionArgs) {
-  // use the form data
-  const formData = await request.formData();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  // connect to Supabase
-  const supabase = createSupabaseServerClient(request);
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  // check for errors
-  if (error) return json({ errors: error });
-
-  console.log({ data });
-
-  // set cookies
-  const { access_token, refresh_token } = data.session;
-
-  // return redirect("/me");
-  return redirect("/me", {
-    headers: {
-      "Set-Cookie": await supabaseAuth.serialize({
-        "sb-access-token": access_token,
-        "sb-refresh-token": refresh_token,
-      }),
-    },
-  });
-}
-
 export default function Login() {
+  const inputForm = useRef<HTMLFormElement>();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // set up the Supabase client
+    const supabase = createSupabaseBrowserClient({
+      SUPABASE_URL: window.ENV.SUPABASE_URL,
+      SUPABASE_ANON_KEY: window.ENV.SUPABASE_ANON_KEY,
+    });
+
+    // get the form data
+    const formData = new FormData(inputForm.current);
+    const dataFields = Object.fromEntries(formData.entries());
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: dataFields.email as string,
+      password: dataFields.password as string,
+    });
+
+    console.log({ data });
+
+    // check for errors
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // redirect to the user's page
+    if (data.session) {
+      navigate("/me");
+    }
+  };
+
   return (
-    <Form method="post">
+    <Form method="post" ref={inputForm as RefObject<HTMLFormElement>}>
       <input type="email" name="email" placeholder="username" />
       <input type="password" name="password" placeholder="password" />
-      <button>LOGIN</button>
+      <button onClick={(e) => handleSubmit(e)}>LOGIN</button>
     </Form>
   );
 }
