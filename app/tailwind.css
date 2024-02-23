@@ -1,3 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply font-mono bg-black text-white;
+  }
+
+  @media (min-width: 768px) {
+    header {
+      background: url('/images/arrow--right.svg') 775px 100px no-repeat, url('/images/arrow--top.svg') 600px top no-repeat;
+    }
+  }
+
+  footer a {
+    @apply border-b-2 border-neutral-500 hover:text-springBud
+  }
+
+  svg {
+    @apply fill-current
+  }
+
+  .field {
+    @apply relative mb-12
+  }
+
+  nav {
+    @apply text-lg
+  }
+
+  nav ul li {
+    @apply mb-3
+  }
+
+  nav ul li a {
+    @apply hover:text-springBud
+  }
+
+  label,
+  label:has(+ input[type=search]:focus),
+  label:has(+ input[type=email]:focus),
+  label:has(+ input[type=password]:focus),
+  label:has(+ input[type=url]:focus),
+  label:has(+ input[type=text]:focus) {
+    @apply uppercase absolute text-mountainMist text-base left-8 -top-7 transition-all duration-300 ease-in-out pointer-events-none font-bold
+  }
+
+  /* changes the label display when the placeholder is showing */
+  label:has(+ input:placeholder-shown) {
+    @apply left-8 top-4 text-2xl text-white font-bold
+  }
+
+  input[type=search],
+  input[type=text],
+  input[type=password],
+  input[type=url],
+  input[type=email] {
+    @apply bg-transparent text-springBud rounded-full border-[3px] border-white px-8 h-16 w-full font-bold
+  }
+
+  input[type=text].short,
+  input[type=search].short {
+    @apply h-[40px] px-4
+  }
+
+  textarea {
+    @apply bg-transparent text-springBud rounded-[16px] border-[3px] border-white px-6 h-[200px] w-full py-5
+  }
+}
+
+@layer components {
+  @media (min-width: 768px) {
+    .bg-interior {
+      background: url('/images/arrow--interior.svg') calc(100% - 70vw) 85px no-repeat;
+    }
+  }
+
+  @media (min-width: 1275px) {
+    .bg-interior {
+      background: url('/images/arrow--interior.svg') left 100px no-repeat;
+    }
+  }
+
+  /* ----------- navigation within the ap layout  --------------------------- */
+  /* the code injects the current page URL on the `ul` tag dynamically */
+  nav ul.me li.me,
+  nav ul.updates_all li.updates_all,
+  nav ul.projects li.projects,
+  nav ul.leaderboard li.leaderboard {
+    @apply text-springBud;
+  }
+
+  .newsletter .register {
+    background: url('/images/circle.svg') center center no-repeat;
+    background-size: 316px 250px;
+    @apply pl-[78px] pt-[72px] w-[316px] h-[250px]
+  }
+
+  .how-it-works ul {
+    counter-reset: ordered-list;
+  }
+
+  .how-it-works ul li {
+    @apply border-b-[3px] border-b-mineShaft py-8 px-page flex items-start md:items-center gap-8;
+  }
+
+  .how-it-works ul li:before {
+    color: white;
+    content: counter(ordered-list);
+    counter-increment: ordered-list;
+    @apply text-[38px] md:text-[90px] leading-none md:leading-[80px]
+  }
+
+  .how-it-works ul li:last-child {
+    @apply border-none;
+  }
+
+  .rules-guidelines {
+    @apply text-lg leading-loose
+  }
+
+  /* ----------- content for each update ----------------------------------- */
+  .content {
+    @apply font-sans
+  }
+
+  .content h1, h2, h3 {
+    @apply text-white font-bold mb-2
+  }
+
+  .content h1 {
+    @apply text-4xl
+  }
+
+  .content h2 {
+    @apply text-2xl
+  }
+
+  .content h3 {
+    @apply text-lg
+  }
+
+  .content p {
+    @apply text-battleshipGray mb-8 text-lg leading-relaxed
+  }
+
+  .content ol {
+    @apply list-decimal list-inside mb-8
+  }
+
+  .content ul {
+    @apply list-disc list-inside mb-8
+  }
+
+  .content li {
+    @apply text-battleshipGray text-lg leading-relaxed
+  }
+
+  .content a {
+    @apply text-white border-b-1 hover:text-springBud
+  }
+
+  .emoji-picker {
+    @apply relative;
+  }
+
+  .emoji-picker:before {
+    content: '';
+    @apply block border-[15px] border-transparent border-b-codGray absolute right-[30px] -top-[30px]
+  }
+
+  /* ----------- comment ---------------------------------------------------- */
+  .content .comment {
+    @apply border-codGray border-2 mb-10 relative
+  }
+
+  /* comment - triangle on the left, pointing to the avatar */
+  .content .comment:before,
+  .content .comment:after {
+    content: '';
+    @apply block border-[16px] border-transparent  absolute
+  }
+
+  /* this is the triangle background color */
+  .content .comment:before {
+    @apply -left-[29px] top-1 border-r-licorice z-[2]
+  }
+
+  /* this is the triangle outline / stroke color */
+  .content .comment:after {
+    @apply -left-[32px] top-1 border-r-codGray z-[1]
+  }
+
+  .content .comment p {
+    @apply text-white;
+  }
+
+  .content .comment p {
+    @apply mb-4
+  }
+
+  /* removes margin from the bottom if this is the only or last paragraph */
+  .content .comment p:last-of-type {
+    @apply mb-0;
+  }
+
+  /* styles the name in the comment's byline */
+  .content .byline a {
+    @apply text-springBud border-b-1 border-b-transparent hover:border-b-white hover:text-white
+  }
+
+  /* banner */
+  .banner .wrapper {
+    @apply col-start-3 col-span-7
+  }
+
+  .banner h1 {
+    @apply text-black font-mono text-[125px] leading-[0.9] tracking-tight
+  }
+
+  /* dropdown menu */
+  .popup-menu {
+    @apply bg-white text-black absolute bottom-[40px] -right-2 w-[200px]
+  }
+
+  .popup-menu:after {
+    content: '';
+    @apply block border-[12px] border-transparent border-t-white absolute -bottom-[22px] right-2
+  }
+
+  .popup-menu ul li {
+    @apply border-b-2 border-black last:border-b-0
+  }
+
+  .popup-menu .menu-item {
+    @apply whitespace-nowrap with-icon px-5 py-2 hover:bg-springBud w-full
+  }
+}
+
+@layer utilities {
+  .center {
+    @apply flex items-center justify-center;
+  }
+
+  /* default page layout grid */
+  .page-grid {
+    @apply grid grid-cols-12 gap-x-5 content-start
+  }
+
+  /* submi button on the auth layout */
+  .auth-button {
+    @apply flex items-center uppercase bg-white font-mono rounded-full w-full text-black justify-center gap-4 pl-10 h-16 text-2xl leading-none hover:bg-springBud mb-16;
+  }
+
+  .button {
+    @apply px-5 py-2 hover:bg-springBud hover:text-black
+  }
+
+  /* hand drawn border / frame that wraps an image */
+  .frame {
+    @apply bg-frame p-5 bg-no-repeat bg-center bg-full flex items-center justify-center
+  }
+
+  /* used for buttons and links that have an icon right next to them */
+  .with-icon {
+    @apply flex items-center gap-2;
+  }
+}
