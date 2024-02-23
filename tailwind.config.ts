@@ -36,11 +36,13 @@ export default {
       zIndex: {
         searchButton: '9999',
         search: '9998',
+        emojiPicker: '9997',
       }
     },
     fontFamily: {
       mono: ['Space Mono', 'monospace'],
-      sans: ['Space Grotesk', 'sans-serif']
+      sans: ['Space Grotesk', 'sans-serif'],
+      emoji: ['Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol']
     }
   },
   plugins: [],

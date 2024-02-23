@@ -13,10 +13,7 @@ export default function LegalLayout() {
           </a>
         </aside>
         <main className="col-span-12 md:col-start-5 md:col-span-6 md:pt-[130px] px-page md:px-0">
-          <h1 className="text-springBud text-4xl md:text-6xl lg:text-8xl font-mono leading-none mb-8 -tracking-tight">
-            Legal
-          </h1>
-          <div className="content">
+          <div className="content legal-content">
             <Outlet />
           </div>
         </main>

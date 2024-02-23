@@ -28,6 +28,10 @@
     @apply relative mb-12
   }
 
+  fieldset[disabled] {
+    @apply opacity-50 pointer-events-none
+  }
+
   nav {
     @apply text-lg
   }
@@ -238,6 +242,11 @@
 
   .popup-menu .menu-item {
     @apply whitespace-nowrap with-icon px-5 py-2 hover:bg-springBud w-full
+  }
+
+  .auth-content h1,
+  .legal-content h1 {
+    @apply text-springBud text-4xl md:text-6xl lg:text-8xl font-mono leading-none mb-8 -tracking-tight;
   }
 }
 

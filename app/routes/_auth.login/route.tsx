@@ -1,6 +1,7 @@
 import { type MetaFunction } from "@remix-run/node";
-import { Form, useNavigate } from "@remix-run/react";
+import { Form, Link, useNavigate } from "@remix-run/react";
 import { MouseEvent, RefObject, useRef } from "react";
+import { Icon } from "~/components/Icon/Icon";
 import { createSupabaseBrowserClient } from "~/supabase.client";
 
 export const meta: MetaFunction = () => {
@@ -44,10 +45,43 @@ export default function Login() {
   };
 
   return (
-    <Form method="post" ref={inputForm as RefObject<HTMLFormElement>}>
-      <input type="email" name="email" placeholder="username" />
-      <input type="password" name="password" placeholder="password" />
-      <button onClick={(e) => handleSubmit(e)}>LOGIN</button>
-    </Form>
+    <>
+      <h1>Login</h1>
+      <Form
+        method="post"
+        ref={inputForm as RefObject<HTMLFormElement>}
+        className="pt-3"
+      >
+        <div className="field">
+          <label htmlFor="email">Email</label>
+          <input type="email" name="email" id="email" placeholder="" />
+        </div>
+        <div className="field">
+          <Link
+            to="/forgot"
+            className="hover:text-springBud right-6 absolute -top-7"
+          >
+            Forgot?
+          </Link>
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" id="password" placeholder="" />
+        </div>
+        <button onClick={(e) => handleSubmit(e)} className="auth-button">
+          submit
+          <Icon name="arrow" />
+        </button>
+        <p className="text-center">
+          NEED AN ACCOUNT?{" "}
+          <strong>
+            <Link
+              to="/register"
+              className="border-b-battleshipGray border-b-2 hover:text-springBud"
+            >
+              Sign Up for FREE
+            </Link>
+          </strong>
+        </p>
+      </Form>
+    </>
   );
 }
