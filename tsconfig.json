@@ -1,5 +1,5 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "./app/global.d.ts"],
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "./app/global.d.ts", "other/build-icons.mts"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
