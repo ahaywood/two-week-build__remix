@@ -8,13 +8,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
   const { data, error } = await supabase.auth.getUser();
   if (error) console.error(error);
-  // if (data.user === null) return redirect("/login");
-  console.log({ data });
+
+  // if there's no user, redirect to the login page
+  if (data.user === null) return redirect("/login");
+
+  // send the user data to the component
   return { data };
 }
 
 export default function Me() {
-  const { data } = useLoaderData();
+  const { data } = useLoaderData<typeof loader>();
 
   return (
     <div>

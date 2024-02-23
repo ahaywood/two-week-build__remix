@@ -1,15 +1,7 @@
-import {
-  ActionFunctionArgs,
-  json,
-  redirect,
-  type MetaFunction,
-} from "@remix-run/node";
-import { Form, useLoaderData, useNavigate } from "@remix-run/react";
-import { RefObject, useRef } from "react";
-import {
-  CreateSupabaseBrowserClientType,
-  createSupabaseBrowserClient,
-} from "~/supabase.client";
+import { type MetaFunction } from "@remix-run/node";
+import { Form, useNavigate } from "@remix-run/react";
+import { MouseEvent, RefObject, useRef } from "react";
+import { createSupabaseBrowserClient } from "~/supabase.client";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,14 +14,12 @@ export default function Login() {
   const inputForm = useRef<HTMLFormElement>();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  // handle form submission on the client side so that Supabase can set up all the necessary cookies
+  const handleSubmit = async (e: MouseEvent) => {
     e.preventDefault();
 
     // set up the Supabase client
-    const supabase = createSupabaseBrowserClient({
-      SUPABASE_URL: window.ENV.SUPABASE_URL,
-      SUPABASE_ANON_KEY: window.ENV.SUPABASE_ANON_KEY,
-    });
+    const supabase = createSupabaseBrowserClient();
 
     // get the form data
     const formData = new FormData(inputForm.current);
