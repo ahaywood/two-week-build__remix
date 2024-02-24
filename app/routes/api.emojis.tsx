@@ -12,8 +12,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   // handle the actions
   if (_action === "add") {
-    console.log("create a reaction");
-    console.log(values.emoji);
+    console.log("create a emoji");
 
     const { error } = await supabase.from("emojis").insert([
       {
@@ -25,14 +24,32 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     if (error) {
       console.error(error);
       return json(
-        { error: "There was an error adding the reaction", ok: false },
+        { error: "There was an error adding the emoji", ok: false },
         500
       );
     }
   }
 
-  if (_action === "delete") {
-    console.log("delete a reaction");
+  if (_action === "remove") {
+    console.log("remove an emoji");
+
+    const { data, error } = await supabase
+      .from("emojis")
+      .delete()
+      .match({
+        emoji: values.emoji,
+        update_id: values.update_id,
+        user_id: values.user_id,
+      })
+      .single();
+    console.log({ data });
+    if (error) {
+      console.error(error);
+      return json(
+        { error: "There was an error removing the emoji", ok: false },
+        500
+      );
+    }
   }
 
   return json({ error: null, ok: true });

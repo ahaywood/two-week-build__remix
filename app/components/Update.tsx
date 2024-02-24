@@ -128,9 +128,18 @@ const Update = ({
         <div className="grid grid-cols-2 gap-3 sticky top-10">
           {update.emojis.length > 0 ? (
             <>
-              {update.emojis.map((emoji) => (
-                <EmojiCount key={emoji.id} number={1} emoji={emoji.emoji} />
-              ))}
+              {update.emojis.map((emoji, index) => {
+                return (
+                  <EmojiCount
+                    key={index}
+                    number={emoji.count}
+                    emoji={emoji.emoji}
+                    defaultSelected={emoji.user_submitted}
+                    current_user_id={currentUser.id!}
+                    update_id={id}
+                  />
+                );
+              })}
               <EmojiPicker
                 updateId={id}
                 userId={currentUser.id!}

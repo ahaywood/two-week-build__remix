@@ -34,6 +34,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // I need to loop through each project and then their updates individually to
   // get the emoji data since I'm computing a few properties and  using rpc
   let projectsWithEmojis = {};
+
   try {
     // loop over all the the projects
     // this returns a projects array with the updates and emojis attached
@@ -68,7 +69,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
             */
             const emojiResults = await supabase.rpc("get_unique_emojis", {
               update_id_param: update.id,
-              user_id_param: data.user.id,
+              user_id_param: result.data.id,
             });
             if (emojiResults.error) throw new Error("Error getting emojis");
             // return the update with the emojis attached
@@ -107,8 +108,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Me() {
   const { data } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
-
-  console.log({ data });
 
   return (
     <>

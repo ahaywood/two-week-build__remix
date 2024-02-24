@@ -45,8 +45,10 @@ export type Update = {
 export type Emoji = {
   id: string,
   emoji: string,
-  user_id: string,
+  user_id?: string,
   update_id: string
+  count?: int
+  user_submitted?: boolean
 }
 
 export type Comment = {

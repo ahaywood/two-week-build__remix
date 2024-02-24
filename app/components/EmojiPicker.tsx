@@ -143,7 +143,7 @@ const EmojiPicker = ({
                           emoji: emoji.emoji,
                           _action: "add",
                         },
-                        { method: "POST", action: "/api/reactions?index" }
+                        { method: "POST", action: "/api/emojis?index" }
                       );
                     }}
                   >
