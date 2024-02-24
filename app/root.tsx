@@ -11,6 +11,7 @@ import {
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
 import { ProgressBar } from "./components/ProgressBar";
+import { GlobalLoading } from "./components/GlobalLoading";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -40,6 +41,7 @@ export default function App() {
       </head>
       <body>
         <ProgressBar />
+        <GlobalLoading />
         <Outlet />
         <ScrollRestoration />
         <Scripts />

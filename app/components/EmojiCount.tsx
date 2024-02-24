@@ -10,8 +10,6 @@ const EmojiCount = ({
   number: number;
 }) => {
   const [isSelected, setIsSelected] = useState(defaultSelected);
-  console.log({ emoji });
-
   const toggle = () => {
     // toggle the state of the button
     setIsSelected((prev) => !prev);

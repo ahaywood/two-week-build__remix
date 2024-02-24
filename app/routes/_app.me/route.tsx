@@ -4,7 +4,7 @@ import { ProfileHeader } from "~/components/ProfileHeader";
 import { ProjectOverview } from "~/components/ProjectOverview";
 import { Update } from "~/components/Update";
 import { UpdateForm } from "~/components/UpdateForm";
-import type { Update as UpdateType } from "~/global";
+import type { Project, Update as UpdateType } from "~/global";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -30,10 +30,73 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .single();
   if (result.error) throw error;
 
+  // Rebuild the Projects Array
+  // I need to loop through each project and then their updates individually to
+  // get the emoji data since I'm computing a few properties and  using rpc
+  let projectsWithEmojis = {};
+  try {
+    // loop over all the the projects
+    // this returns a projects array with the updates and emojis attached
+    // it does not include the rest of the user data
+    projectsWithEmojis = await Promise.all(
+      result.data.projects.map(async (project: Project) => {
+        // loop over all the updates inside a project
+        const updatesWithEmojis = await Promise.all(
+          project.updates.map(async (update: UpdateType) => {
+            // get all the emojis associated with a specific update
+            // this is a custom function that I set up on Supabase
+            /*
+              This is the function that I created within Supabase and ran
+              through the SQL Editor
+
+              create
+              or replace function get_unique_emojis (update_id_param uuid, user_id_param uuid)
+              returns table (emoji text, user_submitted boolean, count int)
+              as $$
+                BEGIN RETURN QUERY
+                select distinct
+                  emojis.emoji,
+                  bool_or(user_id = user_id_param) as user_submitted,
+                  count(emojis.emoji)::int as count
+              from
+                emojis
+              where
+                emojis.update_id = update_id_param
+              group by
+                emojis.emoji;
+              END; $$ language plpgsql stable;
+            */
+            const emojiResults = await supabase.rpc("get_unique_emojis", {
+              update_id_param: update.id,
+              user_id_param: data.user.id,
+            });
+            if (emojiResults.error) throw new Error("Error getting emojis");
+            // return the update with the emojis attached
+            return {
+              ...update,
+              emojis: emojiResults.data,
+            };
+          }) // close map on all updates
+        ); // close Promise.all on updates
+
+        // return the project object with the updates and emojis attached
+        return {
+          ...project,
+          updates: updatesWithEmojis,
+        };
+      })
+    ); // close map on projects
+  } catch (error) {
+    console.error({ error });
+  }
+
   // send the user data to the component
   return {
     data: {
-      me: result.data,
+      me: {
+        ...result.data,
+        projects: projectsWithEmojis,
+      },
       user: {
         email: data?.user?.email,
       },
@@ -44,6 +107,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Me() {
   const { data } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
+
+  console.log({ data });
 
   return (
     <>
@@ -75,7 +140,7 @@ export default function Me() {
             (update: UpdateType, index: number) => (
               <div
                 className="col-span-12 grid grid-cols-subgrid"
-                key={update.id}
+                key={index}
                 // I'm using the order property to reverse the order of the updates
                 // so that the emoji picker appears above, it needs to be listed later in the DOM
                 style={{ order: data.me.projects[0].updates.length - index }}

@@ -121,8 +121,8 @@ const Update = ({
       </div>
 
       {/* emoji picker */}
-      {/* TODO: Did I select one of these reactions? */}
       {/* TODO: Count similar emojis together */}
+      {/* TODO: Did I select one of these reactions? */}
       {/* TODO: Limit the number of Emojis begin shown */}
       <div className="col-span-2 text-center">
         <div className="grid grid-cols-2 gap-3 sticky top-10">

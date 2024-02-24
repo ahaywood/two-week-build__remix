@@ -82,12 +82,14 @@ const EmojiPicker = ({
 
   // filter the emojis in the list as the user starts typing
   const filterEmoji = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
     const filtered = emojis.filter((emoji) => {
       return emoji.aliases.some((alias) => alias.includes(event.target.value));
     });
     setEmojiList(filtered);
   };
+
+  // the user must be logged in, in order to make a selection
+  if (!userId) return null;
 
   return (
     <div className="relative z-emojiPicker">
