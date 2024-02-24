@@ -1,41 +1,63 @@
-import { Form, Link, useFetcher } from "@remix-run/react";
+import { MouseEvent, useMemo, useState } from "react";
+import { Link, useFetcher } from "@remix-run/react";
 import { Avatar } from "./Avatar";
 import { Comment as CommentType, User } from "~/global";
 import { relativeTime } from "~/lib/dateHelpers";
 import { Icon } from "./Icon/Icon";
-import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CommentForm } from "./CommentForm";
 
 interface CommentProps {
   comment: CommentType;
   currentUser?: Partial<User>;
+  update_author_id?: string;
 }
 
-const Comment = ({ comment, currentUser = {} }: CommentProps) => {
+const Comment = ({
+  comment,
+  currentUser = {},
+  update_author_id = "",
+}: CommentProps) => {
   const [isConfirmDeleteShowing, setIsConfirmDeleteShowing] = useState(false);
   const [isEditCommentShowing, setIsEditCommentShowing] = useState(false);
   const deleteCommentForm = useFetcher<{ ok: boolean; error: string }>();
-  const editCommentForm = useFetcher();
 
-  const toggleConfirmDelete = (e) => {
+  const toggleConfirmDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsConfirmDeleteShowing((prev) => !prev);
   };
 
+  console.log({ comment, currentUser, update_author_id });
+
+  const isUpdateAuthor = useMemo(() => {
+    return update_author_id === comment.user_id;
+  }, [update_author_id, comment.user_id]);
+
   return (
-    <div className="relative comment bg-licorice">
+    <div
+      className={`relative comment bg-licorice ${
+        isUpdateAuthor ? "is-author" : ""
+      }`}
+    >
       <div className="absolute -left-[90px] -top-2">
         <Avatar size="56px" alt="A" />
       </div>
       <div className="">
-        <div className="px-6 border-b-1 border-b-codGray text-sm py-3 byline">
+        <div
+          className={`px-6 border-b-1 ${
+            isUpdateAuthor ? "border-b-springBud" : "border-b-codGray"
+          } text-sm py-3 byline`}
+        >
           <strong>
             <Link to={`/${comment.users?.username}`}>
               {comment.users?.name}
             </Link>
           </strong>{" "}
-          commented {relativeTime(comment.created_at)}
+          {isUpdateAuthor && (
+            <span className="text-mountainMist">(Author)</span>
+          )}{" "}
+          &bull; commented {relativeTime(comment.created_at)}
+          <br />
           {/* if the logged in user wrote this comment, then allow them to edit or delete it */}
           {currentUser.id === comment.users?.id && (
             <deleteCommentForm.Form

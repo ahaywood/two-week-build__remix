@@ -78,6 +78,14 @@
   button.inline-form {
     @apply button bg-neutral-700 hover:bg-springBud font-bold uppercase center
   }
+
+  button.square-button {
+    @apply size-8 center font-bold uppercase ;
+  }
+
+  button.square-button.neutral {
+    @apply text-neutral-500 hover:bg-white hover:border-white hover:text-black;
+  }
 }
 
 @layer components {
@@ -186,6 +194,10 @@
     @apply border-codGray border-2 mb-10 relative
   }
 
+  .content .comment.is-author {
+    @apply border-springBud;
+  }
+
   /* comment - triangle on the left, pointing to the avatar */
   .content .comment:before,
   .content .comment:after {
@@ -201,6 +213,10 @@
   /* this is the triangle outline / stroke color */
   .content .comment:after {
     @apply -left-[32px] top-1 border-r-codGray z-[1]
+  }
+
+  .content .comment.is-author:after {
+    @apply border-r-springBud;
   }
 
   .content .comment p {

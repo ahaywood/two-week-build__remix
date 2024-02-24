@@ -27,6 +27,17 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   if (_action === "delete") {
     console.log("delete a reaction");
+    const results = await supabase.from("updates").delete().eq("id", values.id);
+    if (results.error) {
+      console.error(results.error);
+      return json(
+        {
+          error: "Sorry! There was a problem deleting your update.",
+          ok: false,
+        },
+        { status: 500 }
+      );
+    }
   }
 
   return json({ error: null, ok: true });

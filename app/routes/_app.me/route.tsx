@@ -1,3 +1,17 @@
+// TODO:
+// - Edit an update
+// - Mobile Pass
+// - New cohort, new project
+// - Deleting an update does not work if there are emojis on the update
+// - Deleting an update does not work if there are comments on the update
+// - Upload an image to include within the update
+// - Embed a YouTube video on an update
+// - Embed a Loom video on an update
+// - Add Markdown support to comments
+// - Embed a YouTube Video on a comment
+// - Embed a Loom video on a comment
+// - Add Toast
+
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
 import { ProfileHeader } from "~/components/ProfileHeader";
@@ -108,6 +122,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function Me() {
   const { data } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
+
+  console.log({ data });
 
   return (
     <>

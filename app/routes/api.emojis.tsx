@@ -33,7 +33,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (_action === "remove") {
     console.log("remove an emoji");
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("emojis")
       .delete()
       .match({
@@ -42,7 +42,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         user_id: values.user_id,
       })
       .single();
-    console.log({ data });
     if (error) {
       console.error(error);
       return json(

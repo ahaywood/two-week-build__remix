@@ -7,8 +7,8 @@ import { EmojiCount } from "./EmojiCount";
 import { Avatar } from "./Avatar";
 import { ProfileDetails } from "./ProfileDetails";
 import { User, Emoji, Comment as CommentType } from "~/global";
-import { useState } from "react";
-import { Link } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { Link, useFetcher } from "@remix-run/react";
 import { CommentForm } from "./CommentForm";
 import { AnimatePresence, motion } from "framer-motion";
 import { constants } from "~/lib/constants";
@@ -35,32 +35,94 @@ const Update = ({
   user,
   currentUser = {},
 }: UpdateProps) => {
+  console.log({ update, user, currentUser });
   const [isCommentFormShowing, setIsCommentFormShowing] = useState(false);
   const [isEditUpdateFormShowing, setIsEditUpdateFormShowing] = useState(false);
+  const [isConfirmDeleteShowing, setIsConfirmDeleteShowing] = useState(false);
+  const deleteUpdateFetcher = useFetcher<{ ok: boolean; error: string }>();
 
   // toggles visibility of the comment form
   const showCommentForm = () => {
     setIsCommentFormShowing((prevValue) => !prevValue);
   };
 
+  useEffect(() => {
+    if (deleteUpdateFetcher.state === "idle") {
+      setIsConfirmDeleteShowing(false);
+    }
+  }, [deleteUpdateFetcher.state]);
+
   return (
     <>
       <div className="col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray">
         <div className={`sticky top-5 ${isBioShowing ? "pb-20" : ""}`}>
           {update?.created_at && <StackedDate date={update.created_at} />}
-          <div className="flex flex-col gap-2 absolute -right-[42px] top-0">
-            <button
-              className="size-8 center text-neutral-500 font-bold uppercase hover:bg-white hover:border-white hover:text-black"
-              onClick={() =>
-                setIsEditUpdateFormShowing((prevValue) => !prevValue)
-              }
-            >
-              <Icon size="md" name="edit" aria-label="Edit" />
-            </button>
-            <button className="size-8 center text-neutral-500 font-bold uppercase hover:bg-white hover:border-white hover:text-black">
-              <Icon size="md" name="trash" aria-label="Delete" />
-            </button>
-          </div>
+
+          {/* you can't edit or delete an update unless it's yours */}
+          {currentUser.id === user.id && (
+            <div className="flex flex-col gap-2 absolute -right-[42px] top-0">
+              {/* edit button */}
+              <button
+                className="square-button neutral"
+                onClick={() =>
+                  setIsEditUpdateFormShowing((prevValue) => !prevValue)
+                }
+              >
+                <Icon size="md" name="edit" aria-label="Edit" />
+              </button>
+
+              {/* delete button */}
+              <div className="relative">
+                <button
+                  className="square-button neutral"
+                  onClick={() =>
+                    setIsConfirmDeleteShowing((prevValue) => !prevValue)
+                  }
+                >
+                  <Icon size="md" name="trash" aria-label="Delete" />
+                </button>
+
+                {/* confirm delete */}
+                <AnimatePresence>
+                  {isConfirmDeleteShowing && (
+                    <motion.div
+                      className="absolute -left-[52px] -top-1 flex items-center bg-red-600 text-white pr-1 pl-3 py-1 gap-2"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0 }}
+                    >
+                      <div>REALLY?</div>
+                      {/* cancel delete */}
+                      <button
+                        className="square-button bg-black text-springBud"
+                        onClick={() => setIsConfirmDeleteShowing(false)}
+                      >
+                        <Icon size="md" name="close" aria-label="Cancel" />
+                      </button>
+                      {/* confirm delete */}
+                      <deleteUpdateFetcher.Form
+                        method="post"
+                        action="/api/updates?index"
+                      >
+                        <button
+                          className="square-button bg-black text-springBud"
+                          name="_action"
+                          value="delete"
+                        >
+                          <input type="hidden" name="id" value={id} />
+                          <Icon
+                            size="md"
+                            name="check"
+                            aria-label="Confirm Delete"
+                          />
+                        </button>
+                      </deleteUpdateFetcher.Form>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <div className="col-span-5 content">
@@ -83,6 +145,7 @@ const Update = ({
                   key={comment.id}
                   comment={comment}
                   currentUser={currentUser}
+                  update_author_id={user.id}
                 />
               ))}
 
