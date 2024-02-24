@@ -6,7 +6,7 @@ import { EmojiPicker } from "./EmojiPicker";
 import { EmojiCount } from "./EmojiCount";
 import { Avatar } from "./Avatar";
 import { ProfileDetails } from "./ProfileDetails";
-import { User, Emoji, Comment as CommentType } from "~/global";
+import { User, Update as UpdateType } from "~/global";
 import { useEffect, useState } from "react";
 import { Link, useFetcher } from "@remix-run/react";
 import { CommentForm } from "./CommentForm";
@@ -19,12 +19,7 @@ interface UpdateProps {
   user: User;
   id: string;
   isBioShowing?: boolean;
-  update: {
-    created_at: string;
-    content: string;
-    emojis: Emoji[];
-    comments: CommentType[];
-  };
+  update: UpdateType;
   currentUser?: Partial<User>;
 }
 
@@ -128,7 +123,13 @@ const Update = ({
       <div className="col-span-5 content">
         {/* current update */}
         {isEditUpdateFormShowing ? (
-          <UpdateForm projectId={""} />
+          <UpdateForm
+            projectId={update.project_id}
+            defaultUpdate={update}
+            callback={() => {
+              setIsEditUpdateFormShowing(false);
+            }}
+          />
         ) : (
           <div
             dangerouslySetInnerHTML={{ __html: marked.parse(update.content) }}

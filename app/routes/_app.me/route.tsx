@@ -1,5 +1,4 @@
 // TODO:
-// - Edit an update
 // - Mobile Pass
 // - New cohort, new project
 // - Deleting an update does not work if there are emojis on the update
@@ -40,6 +39,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       referencedTable: "projects.updates",
       ascending: true, // this actually puts the oldest first because I'm reordering them with CSS
     })
+    .limit(1, { referencedTable: "projects" })
     .eq("auth_id", data.user.id)
     .single();
   if (result.error) throw error;
@@ -181,10 +181,6 @@ export default function Me() {
             </div>
           </>
         )}
-      </div>
-
-      <div className="w-full overflow-scroll bg-yellow-400 text-black p-10">
-        {JSON.stringify(data)}
       </div>
     </>
   );

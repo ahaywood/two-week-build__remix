@@ -12,7 +12,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   // handle the actions
   if (_action === "create") {
-    console.log("create a reaction");
+    console.log("create an update");
     const results = await supabase.from("updates").insert(values);
     if (results.error) {
       console.error(results.error);
@@ -25,8 +25,26 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     return redirect("/me");
   }
 
+  if (_action === "update") {
+    console.log("update an update");
+    const results = await supabase
+      .from("updates")
+      .update(values)
+      .eq("id", values.id);
+    if (results.error) {
+      console.error(results.error);
+      return json(
+        {
+          error: "Sorry! There was a problem updating your update.",
+          ok: false,
+        },
+        { status: 500 }
+      );
+    }
+  }
+
   if (_action === "delete") {
-    console.log("delete a reaction");
+    console.log("delete an update");
     const results = await supabase.from("updates").delete().eq("id", values.id);
     if (results.error) {
       console.error(results.error);
