@@ -113,10 +113,13 @@ export default function Index() {
 
           {data?.user?.email && (
             <div className="p-3">
-              <button className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full py-1 uppercase px-4 hover:bg-white mb-5">
+              <Link
+                to="/me?new=true#new"
+                className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full py-1 uppercase px-4 hover:bg-white mb-5"
+              >
                 <Icon name="plus-circle" className="size-4" />
                 Add an Update
-              </button>
+              </Link>
               <div className="flex gap-2 justify-between items-center">
                 <Link to="/me" className="flex items-center gap-2">
                   <Avatar alt={data?.name} src={data?.avatar} size="42px" />

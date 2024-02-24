@@ -8,9 +8,12 @@ import { Avatar } from "./Avatar";
 import { ProfileDetails } from "./ProfileDetails";
 import { User, Emoji, Comment as CommentType } from "~/global";
 import { useState } from "react";
-import { Link, useLocation } from "@remix-run/react";
+import { Link } from "@remix-run/react";
 import { CommentForm } from "./CommentForm";
 import { AnimatePresence, motion } from "framer-motion";
+import { constants } from "~/lib/constants";
+import { marked } from "marked";
+import { UpdateForm } from "./UpdateForm";
 
 interface UpdateProps {
   user: User;
@@ -32,9 +35,8 @@ const Update = ({
   user,
   currentUser = {},
 }: UpdateProps) => {
-  const [isCommentFormShowing, setIsCommentFormShowing] = useState<boolean>();
-  const location = useLocation();
-  console.log({ location });
+  const [isCommentFormShowing, setIsCommentFormShowing] = useState(false);
+  const [isEditUpdateFormShowing, setIsEditUpdateFormShowing] = useState(false);
 
   // toggles visibility of the comment form
   const showCommentForm = () => {
@@ -46,12 +48,33 @@ const Update = ({
       <div className="col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray">
         <div className={`sticky top-5 ${isBioShowing ? "pb-20" : ""}`}>
           {update?.created_at && <StackedDate date={update.created_at} />}
+          <div className="flex flex-col gap-2 absolute -right-[42px] top-0">
+            <button
+              className="size-8 center text-neutral-500 font-bold uppercase hover:bg-white hover:border-white hover:text-black"
+              onClick={() =>
+                setIsEditUpdateFormShowing((prevValue) => !prevValue)
+              }
+            >
+              <Icon size="md" name="edit" aria-label="Edit" />
+            </button>
+            <button className="size-8 center text-neutral-500 font-bold uppercase hover:bg-white hover:border-white hover:text-black">
+              <Icon size="md" name="trash" aria-label="Delete" />
+            </button>
+          </div>
         </div>
       </div>
       <div className="col-span-5 content">
-        <p>{update?.content && update.content}</p>
+        {/* current update */}
+        {isEditUpdateFormShowing ? (
+          <UpdateForm projectId={""} />
+        ) : (
+          <div
+            dangerouslySetInnerHTML={{ __html: marked.parse(update.content) }}
+          />
+        )}
 
         {/* TODO: Limit the number of comments showing at once */}
+        {/* TODO: Highlight the comment if it was made by the project author */}
         {currentUser ? (
           <div className="pt-8 mb-16">
             {update.comments &&
@@ -80,7 +103,7 @@ const Update = ({
                 </motion.div>
               ) : (
                 <button
-                  className="button with-icon border-2 border-white text-white font-bold uppercase hover:bg-white hover:text-black"
+                  className="button with-icon border-2 border-battleshipGray text-battleshipGray font-bold uppercase hover:bg-white hover:border-white hover:text-black"
                   onClick={showCommentForm}
                 >
                   <Icon name="comment">Leave a Comment</Icon>
@@ -108,18 +131,26 @@ const Update = ({
               {update.emojis.map((emoji) => (
                 <EmojiCount key={emoji.id} number={1} emoji={emoji.emoji} />
               ))}
-              <EmojiPicker updateId="" userId="" isLabelShowing={false} />
+              <EmojiPicker
+                updateId={id}
+                userId={currentUser.id!}
+                isLabelShowing={false}
+              />
             </>
           ) : (
             <div className="col-span-2 text-left text-sm">
-              <EmojiPicker updateId="" userId="" isLabelShowing={true} />
+              <EmojiPicker
+                updateId={id}
+                userId={currentUser.id!}
+                isLabelShowing={true}
+              />
             </div>
           )}
 
           <div className="col-span-2 pt-3">
             <CopyLink
               className="mx-auto"
-              slug={`${window.ENV.BASE_URL}/updates/${id}`}
+              slug={`${constants.BASE_URL}/updates/${id}`}
             />
           </div>
         </div>

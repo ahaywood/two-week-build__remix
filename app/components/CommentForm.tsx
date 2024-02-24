@@ -2,6 +2,7 @@ import { useFetcher } from "@remix-run/react";
 import { Icon } from "./Icon/Icon";
 import { Comment } from "~/global";
 import { useEffect } from "react";
+import { useEscapeKey } from "~/hooks/useEscapeKey";
 
 interface CommentFormProps {
   user_id: string;
@@ -21,6 +22,8 @@ const CommentForm = ({
   cancel = () => {},
 }: CommentFormProps) => {
   const commentForm = useFetcher<{ ok: boolean; error: string }>();
+
+  useEscapeKey(cancel);
 
   useEffect(() => {
     if (commentForm.state === "idle" && commentForm.data?.ok) {
@@ -51,15 +54,15 @@ const CommentForm = ({
           </textarea>
         </div>
         <div className="flex gap-4 justify-between px-2">
-          <button onClick={cancel} className="relative">
+          <button onClick={cancel} className="relative hover:text-springBud">
             Cancel
           </button>
           <button
-            className="button bg-neutral-700 hover:bg-springBud font-bold uppercase center"
+            className="inline-form"
             name="_action"
             value={defaultComment?.comment ? "update" : "create"}
           >
-            <Icon name="arrow" size="lg">
+            <Icon name="check" size="lg">
               {defaultComment?.comment ? "Update" : "Submit"}
             </Icon>
           </button>

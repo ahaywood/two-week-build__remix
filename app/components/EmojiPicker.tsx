@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { emojis } from "../lib/emojis";
 import { AnimatePresence, motion } from "framer-motion";
 import { useOutsideClick } from "~/hooks/useClickOutside";
+import { useEscapeKey } from "~/hooks/useEscapeKey";
+import { useFetcher } from "@remix-run/react";
 
 interface EmojiPickerProps {
   updateId: string;
@@ -20,6 +22,7 @@ const EmojiPicker = ({
   const searchEmojisInput = useRef<HTMLInputElement>(null);
   const emojiPickerRef = useRef(null);
   const triggerButton = useRef(null);
+  const emojiPickerForm = useFetcher<{ ok: boolean; error: string }>();
 
   // if the user starts to scroll, close the emoji menu
   useEffect(() => {
@@ -44,27 +47,18 @@ const EmojiPicker = ({
   // handle the escape key
   // if there is text in the input,then clear the input and filter
   // if there isn't text in the input, then close the menu
-  useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        // if there's text in the input, clear it
-        if (searchEmojisInput.current!.value !== "") {
-          searchEmojisInput.current!.value = "";
-          setEmojiList(emojis);
-        }
-        // if there's no text, then hide the menu
-        else {
-          setIsEmojiMenuShowing(false);
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      window.removeEventListener("keydown", handleEscape);
-    };
-  }, []);
+  const handleEscape = () => {
+    // if there's text in the input, clear it
+    if (searchEmojisInput.current!.value !== "") {
+      searchEmojisInput.current!.value = "";
+      setEmojiList(emojis);
+    }
+    // if there's no text, then hide the menu
+    else {
+      setIsEmojiMenuShowing(false);
+    }
+  };
+  useEscapeKey(handleEscape);
 
   // toggle the emoji menu open and closed
   const toggleEmojiMenu = () => {
@@ -86,20 +80,13 @@ const EmojiPicker = ({
     setEmojiList(emojis);
   };
 
+  // filter the emojis in the list as the user starts typing
   const filterEmoji = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.value);
     const filtered = emojis.filter((emoji) => {
       return emoji.aliases.some((alias) => alias.includes(event.target.value));
     });
     setEmojiList(filtered);
-  };
-
-  const addReaction = (emoji: string) => {
-    console.log(emoji);
-
-    // TODO: update the database
-
-    toggleEmojiMenu();
   };
 
   return (
@@ -137,17 +124,32 @@ const EmojiPicker = ({
               />
             </div>
 
-            <div className="w-[284px] h-[350px] overflow-scroll grid content-start grid-cols-9 gap-1 p-2">
+            <emojiPickerForm.Form className="w-[284px] h-[350px] overflow-scroll grid content-start grid-cols-9 gap-1 p-2">
               {emojiList.map((emoji, index) => (
-                <button
-                  className="text-xl border-2 border-transparent hover:border-springBud cursor-pointer leading-none p-[2px]"
-                  key={index}
-                  onClick={() => addReaction(emoji.emoji)}
-                >
-                  {emoji.emoji}
-                </button>
+                <>
+                  <button
+                    key={index}
+                    className="text-xl border-2 border-transparent hover:border-springBud cursor-pointer leading-none p-[2px] font-emoji"
+                    onClick={(e) => {
+                      e.preventDefault(); // prevent the form from submitting normally
+                      toggleEmojiMenu(); // close the emoji menu
+                      // I'm handling the form submission so I can send over the selected emoji
+                      emojiPickerForm.submit(
+                        {
+                          user_id: userId,
+                          update_id: updateId,
+                          emoji: emoji.emoji,
+                          _action: "add",
+                        },
+                        { method: "POST", action: "/api/reactions?index" }
+                      );
+                    }}
+                  >
+                    {emoji.emoji}
+                  </button>
+                </>
               ))}
-            </div>
+            </emojiPickerForm.Form>
           </motion.div>
         )}
       </AnimatePresence>

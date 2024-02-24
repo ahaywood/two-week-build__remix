@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -11,24 +11,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const supabase = createSupabaseServerClient(request);
 
   // handle the actions
-  if (_action === "add") {
+  if (_action === "create") {
     console.log("create a reaction");
-    console.log(values.emoji);
-
-    const { error } = await supabase.from("emojis").insert([
-      {
-        emoji: values.emoji,
-        user_id: values.user_id,
-        update_id: values.update_id,
-      },
-    ]);
-    if (error) {
-      console.error(error);
+    const results = await supabase.from("updates").insert(values);
+    if (results.error) {
+      console.error(results.error);
       return json(
-        { error: "There was an error adding the reaction", ok: false },
-        500
+        { error: "Sorry! There was a problem adding your update.", ok: false },
+        { status: 500 }
       );
+      // TODO: Add frontend error handling if there was a problem adding the update
     }
+    return redirect("/me");
   }
 
   if (_action === "delete") {

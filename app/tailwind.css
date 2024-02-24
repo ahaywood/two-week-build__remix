@@ -7,7 +7,7 @@
 
 @layer base {
   html, body {
-    @apply font-mono bg-black text-white;
+    @apply font-mono bg-black text-white scroll-smooth scroll-pt-4;
   }
 
   @media (min-width: 768px) {
@@ -73,6 +73,10 @@
 
   textarea {
     @apply bg-transparent text-springBud rounded-[16px] border-[3px] border-white px-6 h-[200px] w-full py-5
+  }
+
+  button.inline-form {
+    @apply button bg-neutral-700 hover:bg-springBud font-bold uppercase center
   }
 }
 

@@ -14,7 +14,7 @@ const CopyLink = ({
   return (
     <button
       onClick={() => copyToClipboard(slug)}
-      className={`with-icon whitespace-nowrap text-neutral-600 hover:text-springBud ${className}`}
+      className={`with-icon whitespace-nowrap text-neutral-500 hover:text-springBud ${className}`}
     >
       <Icon name="link" size="lg">
         Copy Link
