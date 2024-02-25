@@ -12,7 +12,9 @@ import { Link, useFetcher } from "@remix-run/react";
 import { CommentForm } from "./CommentForm";
 import { AnimatePresence, motion } from "framer-motion";
 import { constants } from "~/lib/constants";
-import { marked } from "marked";
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
 import { UpdateForm } from "./UpdateForm";
 
 interface UpdateProps {
@@ -46,6 +48,16 @@ const Update = ({
       setIsConfirmDeleteShowing(false);
     }
   }, [deleteUpdateFetcher.state]);
+
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: "hljs language-",
+      highlight(code, lang, info) {
+        const language = hljs.getLanguage(lang) ? lang : "plaintext";
+        return hljs.highlight(code, { language }).value;
+      },
+    })
+  );
 
   return (
     <>

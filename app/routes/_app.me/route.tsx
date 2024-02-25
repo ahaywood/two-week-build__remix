@@ -1,6 +1,5 @@
 // TODO:
 // - Mobile Pass
-// - New cohort, new project
 // - Deleting an update does not work if there are emojis on the update
 // - Deleting an update does not work if there are comments on the update
 // - Upload an image to include within the update
@@ -38,6 +37,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     .order("created_at", {
       referencedTable: "projects.updates",
       ascending: true, // this actually puts the oldest first because I'm reordering them with CSS
+    })
+    .order("created_at", {
+      referencedTable: "projects",
+      ascending: false, // combined with limit, this grabs the most recent project
     })
     .limit(1, { referencedTable: "projects" })
     .eq("auth_id", data.user.id)

@@ -302,4 +302,8 @@
   .with-icon {
     @apply flex items-center gap-2;
   }
+
+  pre code.hljs {
+    @apply whitespace-pre-wrap
+  }
 }

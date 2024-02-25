@@ -9,11 +9,13 @@ import {
   json,
   useLoaderData,
 } from "@remix-run/react";
-import stylesheet from "~/tailwind.css";
+import stylesheet from "~/styles/tailwind.css";
+import highlightTheme from "~/styles/dracula.css";
 import { ProgressBar } from "./components/ProgressBar";
 import { GlobalLoading } from "./components/GlobalLoading";
 
 export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: highlightTheme },
   { rel: "stylesheet", href: stylesheet },
 ];
 
