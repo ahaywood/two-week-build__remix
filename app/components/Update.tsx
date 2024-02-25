@@ -16,6 +16,7 @@ import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 import { UpdateForm } from "./UpdateForm";
+import DOMPurify from "dompurify";
 
 interface UpdateProps {
   user: User;
@@ -144,7 +145,11 @@ const Update = ({
           />
         ) : (
           <div
-            dangerouslySetInnerHTML={{ __html: marked.parse(update.content) }}
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                marked.parse(update.content) as string
+              ),
+            }}
           />
         )}
 

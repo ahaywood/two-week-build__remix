@@ -2,13 +2,14 @@
 // - Mobile Pass
 // - Deleting an update does not work if there are emojis on the update
 // - Deleting an update does not work if there are comments on the update
+// - Add Toast
+// Markdown Editor
 // - Upload an image to include within the update
 // - Embed a YouTube video on an update
 // - Embed a Loom video on an update
 // - Add Markdown support to comments
 // - Embed a YouTube Video on a comment
 // - Embed a Loom video on a comment
-// - Add Toast
 
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
