@@ -17,6 +17,10 @@ import { GlobalLoading } from "./components/GlobalLoading";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: highlightTheme },
   { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "stylesheet",
+    href: "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css",
+  },
 ];
 
 export async function loader() {

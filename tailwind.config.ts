@@ -29,6 +29,10 @@ export default {
         licorice: '#141414', /* almost black */
         codGray: '#2f2f2f', /* dark gray */
         chicago: '#5e5e5e',
+        info: '#50C5B7',
+        error: '#cf2c4f',
+        warning: '#ffad02',
+        success: '#32965d'
       },
       padding: {
         page: '32px'
