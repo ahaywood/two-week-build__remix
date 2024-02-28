@@ -27,8 +27,6 @@ const Comment = ({
     setIsConfirmDeleteShowing((prev) => !prev);
   };
 
-  console.log({ comment, currentUser, update_author_id });
-
   const isUpdateAuthor = useMemo(() => {
     return update_author_id === comment.user_id;
   }, [update_author_id, comment.user_id]);

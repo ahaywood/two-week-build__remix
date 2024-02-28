@@ -1,15 +1,16 @@
 // TODO:
 // - Mobile Pass
-// - Deleting an update does not work if there are emojis on the update
-// - Deleting an update does not work if there are comments on the update
-// - Add Toast
+// - Update UI to make it optimistic - https://remix.run/docs/en/main/start/tutorial#optimistic-ui
 // Markdown Editor
 // - Upload an image to include within the update
 // - Embed a YouTube video on an update
 // - Embed a Loom video on an update
+// - Embed a CodePen video on an update
 // - Add Markdown support to comments
 // - Embed a YouTube Video on a comment
 // - Embed a Loom video on a comment
+// - link @ to users
+// - link # to tags
 
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { useLoaderData, useSearchParams } from "@remix-run/react";
@@ -21,8 +22,8 @@ import type { Project, Update as UpdateType } from "~/global";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // get the current Supabase user session
   const supabase = createSupabaseServerClient(request);
+  // get the current Supabase user session
   const { data, error } = await supabase.auth.getUser();
   if (error) console.error(error);
 

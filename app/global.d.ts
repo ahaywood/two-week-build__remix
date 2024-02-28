@@ -17,6 +17,8 @@ export type User = {
   name: string,
   github: string,
   twitter: string,
+  youtube: string,
+  discord: string,
   avatar: string,
   username: string,
   projects: Project[]
@@ -37,17 +39,18 @@ export type Update = {
   date: string,
   content: "string",
   created_at: string,
-  project_id: string
+  project_id: string,
   emojis: Emoji[],
-  comments: Comment[]
+  comments: Comment[],
+  projects?: Project
 }
 
 export type Emoji = {
   id: string,
   emoji: string,
   user_id?: string,
-  update_id: string
-  count?: int
+  update_id: string,
+  count?: int,
   user_submitted?: boolean
 }
 

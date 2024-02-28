@@ -25,7 +25,29 @@
   }
 
   .field {
-    @apply relative mb-12
+    @apply relative mb-14
+  }
+
+  /* when an icon is right next to the input */
+  .field .icon {
+    @apply absolute top-1/2 transform -translate-y-1/2 left-5 text-battleshipGray
+  }
+
+  /* when an input has an icon right next to it, add some more padding */
+  .field input:has(~ .icon) {
+    @apply pl-12;
+  }
+
+  fieldset:has(legend) {
+    @apply border-1 border-chicago px-6 py-8 rounded-[16px] mb-14
+  }
+
+  fieldset:has(legend) .field:last-child {
+    @apply mb-0
+  }
+
+  legend {
+    @apply uppercase bg-chicago text-black px-4 py-2 rounded-full
   }
 
   fieldset[disabled] {
@@ -56,6 +78,17 @@
   /* changes the label display when the placeholder is showing */
   label:has(+ input:placeholder-shown) {
     @apply left-8 top-4 text-2xl text-white font-bold
+  }
+
+  /* when there's an icon next to the input and the placeholder is showing */
+  .field label:has(+ input:placeholder-shown ~ .icon) {
+    @apply left-14;
+  }
+
+  /* when there's an icon next to the input and the field is focused
+    - this needs to be listed after the previous rule to override it */
+  .field label:has(+ input:focus ~ .icon) {
+    @apply left-8
   }
 
   input[type=search],
@@ -178,6 +211,19 @@
 
   .content a {
     @apply text-white border-b-1 hover:text-springBud
+  }
+
+  .content blockquote {
+    @apply border-l-4 border-l-codGray pl-4 text-2xl
+  }
+
+  .content table th,
+  .content table td {
+    @apply border-1 border-codGray py-2 px-4
+  }
+
+  .content table th {
+    @apply bg-licorice text-springBud;
   }
 
   .emoji-picker {
@@ -305,5 +351,9 @@
 
   pre code.hljs {
     @apply whitespace-pre-wrap
+  }
+
+  .alert {
+    @apply px-10 py-4 mb-10 rounded-2xl
   }
 }

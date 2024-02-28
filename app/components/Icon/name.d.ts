@@ -6,6 +6,7 @@ export type IconName =
   | "check"
   | "close"
   | "comment"
+  | "discord"
   | "edit"
   | "github"
   | "link"
@@ -18,4 +19,5 @@ export type IconName =
   | "threeDots"
   | "trash"
   | "user"
-  | "x";
+  | "x"
+  | "youtube";

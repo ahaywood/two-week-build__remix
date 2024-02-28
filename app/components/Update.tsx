@@ -5,7 +5,6 @@ import { CopyLink } from "./CopyLink";
 import { EmojiPicker } from "./EmojiPicker";
 import { EmojiCount } from "./EmojiCount";
 import { Avatar } from "./Avatar";
-import { ProfileDetails } from "./ProfileDetails";
 import { User, Update as UpdateType } from "~/global";
 import { useEffect, useState } from "react";
 import { Link, useFetcher } from "@remix-run/react";
@@ -16,7 +15,6 @@ import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 import hljs from "highlight.js";
 import { UpdateForm } from "./UpdateForm";
-import DOMPurify from "dompurify";
 
 interface UpdateProps {
   user: User;
@@ -33,7 +31,6 @@ const Update = ({
   user,
   currentUser = {},
 }: UpdateProps) => {
-  console.log({ update, user, currentUser });
   const [isCommentFormShowing, setIsCommentFormShowing] = useState(false);
   const [isEditUpdateFormShowing, setIsEditUpdateFormShowing] = useState(false);
   const [isConfirmDeleteShowing, setIsConfirmDeleteShowing] = useState(false);
@@ -134,6 +131,35 @@ const Update = ({
         </div>
       </div>
       <div className="col-span-5 content">
+        {/* BIO */}
+        {isBioShowing && (
+          <div className="bg-licorice p-3 mb-10 relative flex items-center gap-5">
+            <Avatar
+              alt="A"
+              size="72px"
+              src="https://picsum.photos/seed/1706285540310/300/300"
+            />
+            <div>
+              <Link
+                to={`/${user.username}/1`}
+                className="text-chicago text-2xl mb-1 !border-b-0 no-underline"
+              >
+                <strong className="text-springBud font-bold">
+                  {user.name}
+                </strong>{" "}
+                &bull; @{user.username}
+              </Link>
+              <div>
+                I&apos;m building{" "}
+                <Link to={`/profile/${user.username}/1`}>
+                  {update?.projects?.name}
+                </Link>
+                .
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* current update */}
         {isEditUpdateFormShowing ? (
           <UpdateForm
@@ -146,9 +172,7 @@ const Update = ({
         ) : (
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                marked.parse(update.content) as string
-              ),
+              __html: marked.parse(update.content) as string,
             }}
           />
         )}
@@ -245,33 +269,6 @@ const Update = ({
           </div>
         </div>
       </div>
-
-      {/* TODO: Address order of content -- seems strange to have update, comment, bio
-  The bio should be closer to the person who wrote the update. */}
-      {isBioShowing && (
-        <div className="col-span-8 col-start-3 grid grid-cols-subgrid relative -top-10">
-          <div className="col-span-2">
-            <a href={`/profile/selfteachme`}>
-              <Avatar
-                alt="A"
-                size="144px"
-                src="https://picsum.photos/seed/1706285540310/300/300"
-              />
-            </a>
-          </div>
-          <div className="col-span-6 pt-5">
-            <div className="font-6 font-sans font-bold mb-4 text-2xl">
-              <a
-                href={`/profile/selfteachme`}
-                className="text-springBud hover:text-white"
-              >
-                Amy Dutton
-              </a>
-            </div>
-            <ProfileDetails user={user} />
-          </div>
-        </div>
-      )}
     </>
   );
 };
