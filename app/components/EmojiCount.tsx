@@ -15,6 +15,19 @@ const EmojiCount = ({
   update_id: string;
 }) => {
   const emojiFetcher = useFetcher<{ ok: boolean; error: string }>();
+  const [count, setCount] = useState(number);
+  const [selected, setSelected] = useState(defaultSelected);
+
+  // handle button optimistically
+  const handleClick = () => {
+    if (defaultSelected) {
+      setCount((prevCount) => prevCount - 1);
+      setSelected(false);
+    } else {
+      setCount((prevCount) => prevCount + 1);
+      setSelected(true);
+    }
+  };
 
   return (
     <emojiFetcher.Form method="post" action="/api/emojis?index">
@@ -23,15 +36,20 @@ const EmojiCount = ({
       <input type="hidden" name="update_id" value={update_id} />
       <button
         className={`text-lg w-full font-mono font-bold h-8 center border-2 rounded-3xl px-3 py-2 gap-2 hover:bg-codGray ${
-          defaultSelected
+          selected
             ? "border-springBud text-springBud"
             : "border-codGray text-white"
         }`}
         name="_action"
         value={defaultSelected ? "remove" : "add"}
+        onClick={handleClick}
+        disabled={
+          emojiFetcher.state === "submitting" ||
+          emojiFetcher.state === "loading"
+        }
       >
         <span className="font-xl font-emoji">{emoji}</span>
-        {number}
+        {count}
       </button>
     </emojiFetcher.Form>
   );
