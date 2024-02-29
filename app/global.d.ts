@@ -19,6 +19,8 @@ export type User = {
   twitter: string,
   youtube: string,
   discord: string,
+  tiktok: string,
+  linkedin: string,
   avatar: string,
   username: string,
   projects: Project[]
@@ -32,6 +34,19 @@ export type Project = {
   cohort_id: string,
   created_at: string,
   description: string
+  cohorts?: Cohort
+}
+
+export type Cohort = {
+  id: string,
+  name: string,
+  created_at: string;
+  year: number;
+  month: number;
+  number: number;
+  start_date: string;
+  end_date: string;
+  projects?: Project[]
 }
 
 export type Update = {

@@ -30,8 +30,6 @@ export default function Login() {
       password: dataFields.password as string,
     });
 
-    console.log({ data });
-
     // check for errors
     if (error) {
       console.error(error);

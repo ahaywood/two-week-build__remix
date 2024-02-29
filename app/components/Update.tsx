@@ -22,6 +22,7 @@ interface UpdateProps {
   isBioShowing?: boolean;
   update: UpdateType;
   currentUser?: Partial<User>;
+  isStackedDateShowing?: boolean;
 }
 
 const Update = ({
@@ -30,6 +31,7 @@ const Update = ({
   update,
   user,
   currentUser = {},
+  isStackedDateShowing = true,
 }: UpdateProps) => {
   const [isCommentFormShowing, setIsCommentFormShowing] = useState(false);
   const [isEditUpdateFormShowing, setIsEditUpdateFormShowing] = useState(false);
@@ -59,13 +61,15 @@ const Update = ({
 
   return (
     <>
-      <div className="col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray">
+      <div className="col-span-12 md:col-start-2 md:col-span-3 md:mr-10 md:pr-10 md:border-r-3 border-codGray border-b-1 md:border-b-0">
         <div className={`sticky top-5 ${isBioShowing ? "pb-20" : ""}`}>
-          {update?.created_at && <StackedDate date={update.created_at} />}
+          {update?.created_at && isStackedDateShowing && (
+            <StackedDate date={update.created_at} />
+          )}
 
           {/* you can't edit or delete an update unless it's yours */}
           {currentUser.id === user.id && (
-            <div className="flex flex-col gap-2 absolute -right-[42px] top-0">
+            <div className="flex flex-col gap-2 absolute right-0 md:-right-[42px] top-0">
               {/* edit button */}
               <button
                 className="square-button neutral"
@@ -91,7 +95,7 @@ const Update = ({
                 <AnimatePresence>
                   {isConfirmDeleteShowing && (
                     <motion.div
-                      className="absolute -left-[52px] -top-1 flex items-center bg-red-600 text-white pr-1 pl-3 py-1 gap-2"
+                      className="absolute -left-[132px] md:-left-[52px] -top-1 flex items-center bg-red-600 text-white pr-1 pl-3 py-1 gap-2"
                       initial={{ opacity: 0, scale: 0 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0 }}
@@ -130,7 +134,7 @@ const Update = ({
           )}
         </div>
       </div>
-      <div className="col-span-5 content">
+      <div className="col-span-12 md:col-span-7 lg:col-span-5 content p-5 md:p-0">
         {/* BIO */}
         {isBioShowing && (
           <div className="bg-licorice p-3 mb-10 relative flex items-center gap-5">
@@ -178,7 +182,6 @@ const Update = ({
         )}
 
         {/* TODO: Limit the number of comments showing at once */}
-        {/* TODO: Highlight the comment if it was made by the project author */}
         {currentUser ? (
           <div className="pt-8 mb-16">
             {update.comments &&
@@ -226,11 +229,9 @@ const Update = ({
       </div>
 
       {/* emoji picker */}
-      {/* TODO: Count similar emojis together */}
-      {/* TODO: Did I select one of these reactions? */}
       {/* TODO: Limit the number of Emojis begin shown */}
-      <div className="col-span-2 text-center">
-        <div className="grid grid-cols-2 gap-3 sticky top-10">
+      <div className="col-span-12 md:col-start-5 md:col-span-7 lg:col-span-2 text-center p-5 md:p-0">
+        <div className="flex flex-row flex-wrap items-center lg:grid lg:grid-cols-2 gap-3 sticky top-10">
           {update.emojis.length > 0 ? (
             <>
               {update.emojis.map((emoji, index) => {
@@ -252,7 +253,7 @@ const Update = ({
               />
             </>
           ) : (
-            <div className="col-span-2 text-left text-sm">
+            <div className="md:col-span-2 text-left text-sm">
               <EmojiPicker
                 updateId={id}
                 userId={currentUser.id!}
@@ -261,7 +262,7 @@ const Update = ({
             </div>
           )}
 
-          <div className="col-span-2 pt-3">
+          <div className="lg:col-span-2 lg:pt-3">
             <CopyLink
               className="mx-auto"
               slug={`${constants.BASE_URL}/updates/${id}`}

@@ -1,7 +1,7 @@
 const Footer = () => {
   const currentYear = () => new Date().getFullYear();
   return (
-    <footer className="p-page text-neutral-500 flex xl:justify-between flex-col xl:flex-row gap-4">
+    <footer className="p-5 text-sm md:p-page text-neutral-500 flex xl:justify-between flex-col xl:flex-row gap-4">
       <div>
         Copyright &copy;{currentYear()}{" "}
         <a href="https://ahhacreative.com" target="_blank" rel="noreferrer">

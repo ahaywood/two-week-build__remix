@@ -1,4 +1,4 @@
-interface AvatarProps {
+export interface AvatarProps {
   alt: string;
   className?: string;
   size?: string;
@@ -15,13 +15,13 @@ const Avatar = ({ alt, className = "", size = "72px", src }: AvatarProps) => {
     <img
       src={src}
       alt={alt}
-      style={{ width: size, height: size }}
-      className={`rounded-full object-cover ${className}`}
+      style={{ width: size, maxWidth: "100%" }}
+      className={`rounded-full object-cover aspect-square ${className}`}
     />
   ) : (
     <div
       className={`rounded-full text-2xl bg-mineShaft aspect-square center text-white ${className}`}
-      style={{ width: size, height: size }}
+      style={{ width: size, maxWidth: "100%" }}
     >
       {firstLetter(alt)}
     </div>

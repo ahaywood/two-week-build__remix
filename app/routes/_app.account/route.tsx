@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const result = await supabase
     .from("users")
     .select(
-      "id, discord, youtube, github, location, name, twitter, username, website"
+      "id, discord, youtube, github, location, name, twitter, username, website, linkedin, tiktok, avatar"
     )
     .eq("auth_id", data.user.id)
     .single();
@@ -101,6 +101,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // update supabase with the new user data
+  // TODO: Make code smart enough to determine if a URL or a handle was entered
   const user = await supabase
     .from("users")
     .update({
@@ -111,6 +112,8 @@ export async function action({ request }: ActionFunctionArgs) {
       twitter: formData.get("twitter") as string,
       username: formData.get("username") as string,
       website: formData.get("website") as string,
+      tiktok: formData.get("tiktok") as string,
+      linkedin: formData.get("linkedin") as string,
     })
     .eq("id", formData.get("id") as string);
   if (user.error) {
@@ -258,7 +261,7 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="discord">YouTube</label>
+              <label htmlFor="youtube">YouTube</label>
               <input
                 type="url"
                 name="youtube"
@@ -268,6 +271,32 @@ export default function Index() {
               />
               <div className="icon">
                 <Icon name="youtube" size="xl" />
+              </div>
+            </div>
+            <div className="field">
+              <label htmlFor="tiktok">Tiktok</label>
+              <input
+                type="url"
+                name="tiktok"
+                id="tiktok"
+                placeholder=""
+                defaultValue={data.user.tiktok}
+              />
+              <div className="icon">
+                <Icon name="tiktok" size="xl" />
+              </div>
+            </div>
+            <div className="field">
+              <label htmlFor="linkedin">Linkedin</label>
+              <input
+                type="url"
+                name="linkedin"
+                id="linkedin"
+                placeholder=""
+                defaultValue={data.user.linkedin}
+              />
+              <div className="icon">
+                <Icon name="linkedin" size="xl" />
               </div>
             </div>
             <div className="field">

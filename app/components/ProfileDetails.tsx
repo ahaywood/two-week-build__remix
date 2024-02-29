@@ -6,18 +6,19 @@ interface ProfileDetailsProps {
 }
 
 const ProfileDetails = ({ user }: ProfileDetailsProps) => {
-  // TODO: Add TikTok, YouTube, and LinkedIn to the top section
+  const removeHttp = (url: string) => {
+    return url.replace(/(^\w+:|^)\/\//, "");
+  };
+
   return (
-    <div className="grid grid-cols-3 gap-x-5 gap-y-2 font-sans text-mountainMist font-bold text-sm mb-8">
-      {user?.location ? (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 font-sans text-mountainMist font-bold text-sm mb-8">
+      {user?.location && (
         <div className="with-icon">
           <Icon name="location" size="md" />
           {user.location}
         </div>
-      ) : (
-        <div />
       )}
-      {user?.github ? (
+      {user?.github && (
         <a
           href={`https://github.com/${user.github}`}
           className="with-icon hover:text-springBud"
@@ -28,10 +29,8 @@ const ProfileDetails = ({ user }: ProfileDetailsProps) => {
             {user.github}
           </Icon>
         </a>
-      ) : (
-        <div />
       )}
-      {user?.twitter ? (
+      {user?.twitter && (
         <a
           href={`https://twitter.com/${user.twitter}`}
           className="with-icon hover:text-springBud"
@@ -42,31 +41,32 @@ const ProfileDetails = ({ user }: ProfileDetailsProps) => {
             @{user.twitter}
           </Icon>
         </a>
-      ) : (
-        <div />
       )}
-      {user?.website ? (
+      {user?.website && (
         <a
           href={user.website}
-          className="with-icon hover:text-springBud"
+          className="with-icon hover:text-springBud truncate"
           target="_blank"
           rel="noreferrer"
         >
           <Icon name="link" size="md">
-            {user.website}
+            {removeHttp(user.website)}
           </Icon>
         </a>
-      ) : (
-        <div />
       )}
-      {user?.discord ? (
-        <Icon name="x" size="md">
-          @{user.discord}
-        </Icon>
-      ) : (
-        <div />
+      {user?.discord && (
+        <a
+          href={`https://</div>discordapp.com/users/${user.discord}`}
+          className="with-icon hover:text-springBud"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Icon name="discord" size="md">
+            @{user.discord}
+          </Icon>
+        </a>
       )}
-      {user?.youtube ? (
+      {user?.youtube && (
         <a
           href={`${user.youtube}`}
           className="with-icon hover:text-springBud"
@@ -77,8 +77,30 @@ const ProfileDetails = ({ user }: ProfileDetailsProps) => {
             YouTube
           </Icon>
         </a>
-      ) : (
-        <div />
+      )}
+      {user?.tiktok && (
+        <a
+          href={`${user.tiktok}`}
+          className="with-icon hover:text-springBud"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Icon name="tiktok" size="md">
+            @{user.tiktok}
+          </Icon>
+        </a>
+      )}
+      {user?.linkedin && (
+        <a
+          href={`${user.linkedin}`}
+          className="with-icon hover:text-springBud"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Icon name="linkedin" size="md">
+            LinkedIn
+          </Icon>
+        </a>
       )}
     </div>
   );

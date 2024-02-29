@@ -1,6 +1,7 @@
 import { Project, User } from "~/global";
-import { Avatar } from "./Avatar";
-import { Icon } from "./Icon/Icon";
+import { Avatar } from "~/components/Avatar";
+import { Icon } from "~/components/Icon/Icon";
+import { Link } from "@remix-run/react";
 
 interface ProjectOverviewProps {
   isAvatarShowing?: boolean;
@@ -59,10 +60,15 @@ const ProjectOverview = ({
             )}
           </div>
         </div>
-        <h2 className="font-sans font-bold text-2xl">
-          {project?.name && project.name}
+        <h2 className="font-sans font-bold text-lg md:text-2xl">
+          <Link
+            to={`/${user.username}/${project?.cohorts?.id}`}
+            className="hover:text-springBud"
+          >
+            {project?.name && project.name}
+          </Link>
         </h2>
-        <p className="font-sans text-lg leading-normal">
+        <p className="font-sans md:text-lg leading-normal">
           {project?.description && project.description}
         </p>
       </div>

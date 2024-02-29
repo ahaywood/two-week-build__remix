@@ -1,4 +1,4 @@
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { formatDistance, formatDistanceToNow, parseISO } from "date-fns";
 
 export const currentMonth = new Date().getMonth();
 export const currentDay = new Date().getDate();
@@ -67,3 +67,4 @@ export const relativeTime = (timestamp: string) => {
   const date = parseISO(timestamp);
   return formatDistanceToNow(date, { addSuffix: true });
 }
+
