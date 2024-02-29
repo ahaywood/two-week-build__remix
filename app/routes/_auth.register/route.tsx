@@ -1,6 +1,18 @@
 import { useRef, RefObject, useState, MouseEvent } from "react";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, MetaFunction } from "@remix-run/react";
 import { Icon } from "~/components/Icon";
+import { constants } from "~/lib/constants";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: `${constants.OG_TITLE} :: Register` },
+    {
+      name: "description",
+      content:
+        "Join our community of passionate builders and turn your ideas into reality, one two-week sprint at a time. We can't wait to see what you'll build.",
+    },
+  ];
+};
 
 export default function Index() {
   const inputForm = useRef(null);

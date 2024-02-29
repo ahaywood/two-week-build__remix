@@ -3,9 +3,16 @@ import { Link } from "@remix-run/react";
 interface TopNavProps {
   pathname: string;
   isUserLoggedIn?: boolean;
+  currentUsername?: string;
+  callback?: () => void;
 }
 
-const TopNav = ({ pathname, isUserLoggedIn = false }: TopNavProps) => {
+const TopNav = ({
+  pathname,
+  isUserLoggedIn = false,
+  currentUsername = "",
+  callback = () => {},
+}: TopNavProps) => {
   /**
    * Takes the current URL path and converts into a form that can be used as a CSS class name
    * @param path {string}
@@ -30,18 +37,30 @@ const TopNav = ({ pathname, isUserLoggedIn = false }: TopNavProps) => {
     <nav>
       <ul className={cssClassify(pathname)}>
         {isUserLoggedIn && (
-          <li className="me">
-            <Link to="/me">My Profile</Link>
+          <li
+            className={
+              currentUsername === cssClassify(pathname) ? "text-springBud" : ""
+            }
+          >
+            <Link to={`/${currentUsername}`} onClick={callback}>
+              My Profile
+            </Link>
           </li>
         )}
         <li className="updates_all">
-          <Link to="/updates/all">All Updates</Link>
+          <Link to="/updates/all" onClick={callback}>
+            All Updates
+          </Link>
         </li>
         <li className="projects">
-          <Link to="/projects">All Projects</Link>
+          <Link to="/projects" onClick={callback}>
+            All Projects
+          </Link>
         </li>
         <li className="leaderboard">
-          <Link to="/leaderboard">Leaderboard</Link>
+          <Link to="/leaderboard" onClick={callback}>
+            Leaderboard
+          </Link>
         </li>
       </ul>
     </nav>

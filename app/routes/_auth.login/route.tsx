@@ -1,19 +1,37 @@
+/* eslint-disable jsx-a11y/tabindex-no-positive */
+// TODO
+// - Responsive Pass
+// - SEO Pass
+
 import { type MetaFunction } from "@remix-run/node";
 import { Form, Link, useNavigate } from "@remix-run/react";
-import { MouseEvent, RefObject, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { MouseEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Icon } from "~/components/Icon/Icon";
+import { constants } from "~/lib/constants";
 import { createSupabaseBrowserClient } from "~/supabase.client";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Two Week Build :: Login" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: `${constants.OG_TITLE} :: Login` },
+    {
+      name: "description",
+      content:
+        "Log in to the Two Week Build Challenge, where the deadlines are tight and the coffee is hot!",
+    },
   ];
 };
 
 export default function Login() {
   const inputForm = useRef<HTMLFormElement>();
+  const firstField = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // focus on the first field in the form on page load
+  useEffect(() => {
+    firstField.current?.focus();
+  }, []);
 
   // handle form submission on the client side so that Supabase can set up all the necessary cookies
   const handleSubmit = async (e: MouseEvent) => {
@@ -33,6 +51,7 @@ export default function Login() {
     // check for errors
     if (error) {
       console.error(error);
+      setErrorMessage(error.message);
       return;
     }
 
@@ -42,9 +61,24 @@ export default function Login() {
     }
   };
 
+  const clearErrorMessage = () => {
+    setErrorMessage("");
+  };
+
   return (
     <>
       <h1>Login</h1>
+      <AnimatePresence>
+        {errorMessage && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <div className="alert bg-error">{errorMessage}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <Form
         method="post"
         ref={inputForm as RefObject<HTMLFormElement>}
@@ -52,7 +86,15 @@ export default function Login() {
       >
         <div className="field">
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" placeholder="" />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder=""
+            onChange={clearErrorMessage}
+            ref={firstField}
+            tabIndex={1}
+          />
         </div>
         <div className="field">
           <Link
@@ -62,9 +104,20 @@ export default function Login() {
             Forgot?
           </Link>
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" placeholder="" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder=""
+            onChange={clearErrorMessage}
+            tabIndex={2}
+          />
         </div>
-        <button onClick={(e) => handleSubmit(e)} className="auth-button">
+        <button
+          tabIndex={3}
+          onClick={(e) => handleSubmit(e)}
+          className="auth-button"
+        >
           submit
           <Icon name="arrow" />
         </button>

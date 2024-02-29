@@ -5,12 +5,8 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'arrowAuth': "url('/images/arrow--auth.svg')",
         'arrowProfile': "url('/images/arrow--profile.svg')",
         'frame': "url('/images/frame.svg')",
-      },
-      backgroundPosition: {
-        'arrowAuth': '120% 65px',
       },
       backgroundSize: {
         'full': '100% 100%'
@@ -41,6 +37,8 @@ export default {
         searchButton: '9999',
         search: '9998',
         emojiPicker: '9997',
+        mobileMenu: '9996',
+        hamburger: '9995',
       }
     },
     fontFamily: {

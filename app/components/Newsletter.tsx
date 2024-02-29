@@ -3,12 +3,12 @@ import { Icon } from "./Icon/Icon";
 const Newsletter = () => {
   return (
     <form
-      className="inline-block relative pb-[100px] newsletter kwes-form"
+      className="inline-block relative pb-[130px] newsletter kwes-form"
       action="https://kwesforms.com/api/foreign/forms/toyYcLrR9215nenXgNOe"
       method="POST"
       data-success-message="Thanks for signing up! Be on the lookout for an email to confirm."
     >
-      <div className="relative w-full md:w-[500px] text-left">
+      <div className="relative w-full lg:w-[500px] text-left">
         <input
           type="email"
           placeholder="YOUR EMAIL"

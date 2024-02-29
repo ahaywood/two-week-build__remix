@@ -1,6 +1,7 @@
 // TODO:
 // - Add pagination
 // - Handle empty return
+// - Too much empty space around the date in responsive view
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/supabase.server";

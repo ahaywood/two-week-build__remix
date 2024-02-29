@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -13,6 +13,7 @@ import stylesheet from "~/styles/tailwind.css";
 import highlightTheme from "~/styles/dracula.css";
 import { ProgressBar } from "./components/ProgressBar";
 import { GlobalLoading } from "./components/GlobalLoading";
+import { constants } from "./lib/constants";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: highlightTheme },

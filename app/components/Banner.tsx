@@ -4,7 +4,7 @@ interface BannerProps {
 
 const Banner = ({ children }: BannerProps) => {
   return (
-    <div className="bg-springBud px-page py-10 mb-20 mt-4 banner">
+    <div className="bg-springBud px-page py-10 mb-6 md:mb-20 mt-4 banner">
       {children}
     </div>
   );

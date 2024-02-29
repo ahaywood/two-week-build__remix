@@ -1,9 +1,12 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { EditProfileButton } from "~/components/EditProfileButton";
 import Footer from "~/components/Footer";
 import { Icon } from "~/components/Icon/Icon";
+import { LoginButton } from "~/components/LoginButton";
 import Newsletter from "~/components/Newsletter";
 import { Search } from "~/components/Search";
+import { SignUpButton } from "~/components/SignUpButton";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 export const meta: MetaFunction = () => {
@@ -47,23 +50,11 @@ export default function Index() {
         <div className="absolute right-6 top-6 flex items-center gap-3">
           <Search />
           {data.user?.id ? (
-            <Link to="/me" className="with-icon button bg-codGray inline-block">
-              <Icon name="user">MY PROFILE</Icon>
-            </Link>
+            <EditProfileButton username="me" />
           ) : (
             <>
-              <Link
-                to="/register"
-                className="with-icon button bg-codGray inline-block"
-              >
-                <Icon name="check" /> SIGN UP
-              </Link>
-              <Link
-                to="/login"
-                className="with-icon button bg-codGray inline-block"
-              >
-                <Icon name="login" /> LOGIN
-              </Link>
+              <SignUpButton />
+              <LoginButton isUserLoggedIn={!!data.user} />
             </>
           )}
         </div>

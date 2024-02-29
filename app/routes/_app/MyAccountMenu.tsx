@@ -5,6 +5,7 @@ import { Link } from "@remix-run/react";
 import { Icon } from "~/components/Icon/Icon";
 import { useEscapeKey } from "~/hooks/useEscapeKey";
 import { useOutsideClick } from "~/hooks/useClickOutside";
+import { LogoutButton } from "~/components/LogoutButton";
 
 export const MyAccountMenu = () => {
   const [isMenuShowing, setIsMenuShowing] = useState(false);
@@ -34,14 +35,7 @@ export const MyAccountMenu = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/logout"
-                  type="submit"
-                  className="menu-item"
-                  onClick={() => setIsMenuShowing(false)}
-                >
-                  <Icon name="logout">Logout</Icon>
-                </Link>
+                <LogoutButton />
               </li>
             </ul>
           </motion.div>

@@ -20,7 +20,9 @@ const LeaderboardListItem = ({
 
   return (
     <div className="flex gap-4">
-      <Avatar {...avatar} />
+      <div>
+        <Avatar {...avatar} />
+      </div>
       <div>
         <h4 className="text-xl mb-2">Amy Dutton</h4>
         <ul className="flex items-center gap-3">

@@ -289,7 +289,7 @@
   }
 
   .banner h1 {
-    @apply text-black font-mono text-[125px] leading-[0.9] tracking-tight
+    @apply text-black font-mono text-[48px] md:text-[72px] lg:text-[125px] leading-[0.9] tracking-tight
   }
 
   /* dropdown menu */
@@ -317,6 +317,12 @@
 
   .show-json {
     @apply w-full overflow-scroll bg-yellow-400 text-black p-10;
+  }
+
+  .background-authArrow {
+    background-image: url('/images/arrow--auth.svg');
+    background-position: 120% 65px;
+    background-repeat: no-repeat;
   }
 }
 

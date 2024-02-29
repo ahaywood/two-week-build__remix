@@ -131,7 +131,7 @@ export default function Index() {
   return (
     <div>
       <Banner>
-        <h1>My Account</h1>
+        <h1 className="pl-0 lg:pl-[15%]">My Account</h1>
       </Banner>
 
       <div className="page-grid" ref={pageTop}>
@@ -149,7 +149,7 @@ export default function Index() {
         <Form
           key={data.user.id}
           method="post"
-          className="col-start-3 col-span-7"
+          className="col-span-12 px-5 md:px-0 md:col-start-3 md:col-span-7"
         >
           <input type="hidden" name="id" value={data.user.id} />
           <fieldset>

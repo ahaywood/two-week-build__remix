@@ -1,14 +1,34 @@
-import { MouseEvent, useRef, RefObject, useState } from "react";
+// TODO
+// - Responsive Pass
+// - SEO Pass
+
+import { MouseEvent, useRef, RefObject, useState, useEffect } from "react";
 import { Icon } from "~/components/Icon";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, MetaFunction } from "@remix-run/react";
 import { createSupabaseBrowserClient } from "~/supabase.client";
 import { constants } from "~/lib/constants";
 
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Two Week Build :: Forgot Password" },
+    {
+      name: "description",
+      content:
+        "Oops! Forgot your password? Happens to the best of us. Don't worry, just a few clicks and you'll be back to building amazing things in no time. Let's reset and roll!",
+    },
+  ];
+};
+
 export default function Index() {
   const inputForm = useRef<HTMLFormElement>();
+  const firstField = useRef<HTMLInputElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const supabase = createSupabaseBrowserClient();
+
+  useEffect(() => {
+    firstField.current?.focus();
+  }, []);
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -44,7 +64,13 @@ export default function Index() {
       >
         <div className="field">
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" placeholder="" />
+          <input
+            ref={firstField}
+            type="email"
+            name="email"
+            id="email"
+            placeholder=""
+          />
         </div>
         <button onClick={(e) => handleSubmit(e)} className="auth-button">
           Email me a Reset
