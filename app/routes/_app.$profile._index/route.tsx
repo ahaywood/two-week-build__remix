@@ -1,5 +1,6 @@
 // TODO:
 // - Update UI to make it optimistic - https://remix.run/docs/en/main/start/tutorial#optimistic-ui
+// - Consider popping the update out into a modal
 // Markdown Editor
 // - Upload an image to include within the update
 // - Embed a YouTube video on an update
@@ -12,7 +13,7 @@
 // - link # to tags
 
 import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { useLoaderData, useSearchParams } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { ProfileHeader } from "~/components/ProfileHeader";
 import { ProjectOverview } from "~/components/ProjectOverview";
 import { Update } from "~/components/Update";
@@ -20,12 +21,21 @@ import { UpdateForm } from "~/components/UpdateForm";
 import type { Project, Update as UpdateType, User } from "~/global";
 import { constants } from "~/lib/constants";
 import { createSupabaseServerClient } from "~/supabase.server";
+import { AddUpdateButton } from "../_app/AddUpdateButton";
+import { Icon } from "~/components/Icon";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
   // get the current Supabase user session
   const { data, error } = await supabase.auth.getUser();
   if (error) console.error(error);
+
+  // does the user have a project?
+  // const projectResults = await supabase
+  //   .from("projects")
+  //   .select("id, users(auth_id)")
+  //   .eq("users.auth_id", params.profile as string);
+  // if (projectResults.error) console.error(projectResults.error);
 
   // get all of the data for the current user
   const username = params.profile as string;
@@ -149,13 +159,14 @@ export const meta = ({ data }: MetaFunctionArgs) => {
     },
     {
       name: "description",
-      content: `Take a look at ${data?.data?.me?.name}'s project, ${data?.data?.me?.projects[0]?.name}, their updates and progress.`,
+      content: `Take a look at ${data?.data?.me?.name}'s project, their updates and progress.`,
     },
   ];
 };
 
 export default function Me() {
   const { data } = useLoaderData<typeof loader>();
+  console.log({ data });
   const [searchParams] = useSearchParams();
 
   return (
@@ -166,11 +177,13 @@ export default function Me() {
         <div className="md:col-start-5 md:col-span-7 col-span-12 p-5 md:p-0">
           {/* TODO: Make sure it is only returning the most recent project */}
           {/* TODO: Add navigation at the top for all the cohorts that someone has participated in */}
-          <ProjectOverview
-            project={data.me.projects[0]}
-            user={data.me}
-            isAvatarShowing={false}
-          />
+          {data.me.projects[0] && (
+            <ProjectOverview
+              project={data.me.projects[0]}
+              user={data.me}
+              isAvatarShowing={false}
+            />
+          )}
         </div>
 
         {/* UPDATES */}
@@ -182,7 +195,7 @@ export default function Me() {
         )}
 
         {/* LIST UPDATES */}
-        {data.me.projects[0].updates.length > 0 ? (
+        {data.me.projects[0] && data.me.projects[0].updates.length > 0 ? (
           data.me.projects[0].updates.map(
             (update: UpdateType, index: number) => (
               <div
@@ -208,14 +221,21 @@ export default function Me() {
             )
           )
         ) : (
-          <>
+          <div className="col-span-12 grid grid-cols-subgrid relative -top-[150px] lg:-top-[30px]">
             {/* TODO: Update the design on the empty state */}
-            <div className="col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray" />
-            <div className="col-span-5 content">
-              <p>No Updates, yet</p>
-              <button>Add an Update</button>
+            <div className="hidden md:block col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray" />
+            <div className="col-span-12 px-5 md:px-0 md:col-span-5">
+              {!searchParams.get("new") && (
+                <Link
+                  to={`?new=true#new`}
+                  className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full py-1 uppercase px-4 hover:bg-white mb-5 py-4"
+                >
+                  <Icon name="plus-circle" className="size-4" />
+                  Add your First Update
+                </Link>
+              )}
             </div>
-          </>
+          </div>
         )}
       </div>
     </>
