@@ -363,7 +363,7 @@ export default function AccountPage() {
             </div>
             <div className="field">
               <label htmlFor="avatar">Your Avatar</label>
-              <input type="hidden" name="oldAvatar" value={data.user.avatar} />
+              <input type="hidden" name="oldAvatar" />
               <input
                 type="file"
                 name="avatar"
