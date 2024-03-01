@@ -15,7 +15,7 @@ const Search = () => {
   return (
     <>
       <button
-        className={`with-icon button bg-codGray z-searchButton ${
+        className={`!hidden with-icon button bg-codGray z-searchButton ${
           isSearchShowing ? "hover:bg-white hover:text-black" : ""
         }`}
         onClick={toggleSearch}

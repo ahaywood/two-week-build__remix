@@ -13,7 +13,12 @@
 // - link # to tags
 
 import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
+import {
+  Link,
+  useLoaderData,
+  useLocation,
+  useSearchParams,
+} from "@remix-run/react";
 import { ProfileHeader } from "~/components/ProfileHeader";
 import { ProjectOverview } from "~/components/ProjectOverview";
 import { Update } from "~/components/Update";
@@ -24,20 +29,25 @@ import { createSupabaseServerClient } from "~/supabase.server";
 import { AddUpdateButton } from "../_app/AddUpdateButton";
 import { Icon } from "~/components/Icon";
 
+// Get the auth information for the current user
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
   // get the current Supabase user session
   const { data, error } = await supabase.auth.getUser();
   if (error) console.error(error);
 
-  // does the user have a project?
-  // const projectResults = await supabase
-  //   .from("projects")
-  //   .select("id, users(auth_id)")
-  //   .eq("users.auth_id", params.profile as string);
-  // if (projectResults.error) console.error(projectResults.error);
+  // if the user is logged in, get their details
+  let currentUserResults;
+  if (data?.user) {
+    currentUserResults = await supabase
+      .from("users")
+      .select("id, username")
+      .eq("auth_id", data.user?.id)
+      .single();
+    if (currentUserResults.error) console.error(currentUserResults.error);
+  }
 
-  // get all of the data for the current user
+  // get all of the data for the user with this slug
   const username = params.profile as string;
   const result = await supabase
     .from("users")
@@ -131,6 +141,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       },
       user: {
         email: data?.user?.email,
+        ...currentUserResults.data,
       },
     },
   };
@@ -164,26 +175,43 @@ export const meta = ({ data }: MetaFunctionArgs) => {
   ];
 };
 
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function Me() {
   const { data } = useLoaderData<typeof loader>();
-  console.log({ data });
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  console.log({ data, location });
 
   return (
     <>
       <ProfileHeader user={data.me} />
       {/* The gap here controls the spacing between each of the updates */}
       <div className="page-grid gap-y-[200px] lg:gap-y-[80px] mb-[100px] md:mb-10">
-        <div className="md:col-start-5 md:col-span-7 col-span-12 p-5 md:p-0">
+        <div className="md:col-start-5 md:col-span-7 col-span-12 p-5 md:p-0 relative">
           {/* TODO: Make sure it is only returning the most recent project */}
           {/* TODO: Add navigation at the top for all the cohorts that someone has participated in */}
-          {data.me.projects[0] && (
+          {data.me.projects[0] && data.user.email && (
             <ProjectOverview
               project={data.me.projects[0]}
               user={data.me}
               isAvatarShowing={false}
             />
           )}
+
+          {/* if this is the logged in user's profile page, then give them buttons to edit their project */}
+          <div className="absolute right-0 bottom-0 flex gap-2">
+            <button className="square-button">
+              <Link
+                to={`/projects/edit/${data.me.projects[0].id}`}
+                className="bg-chicago size-8 hover:bg-springBud hover:text-black"
+              >
+                <Icon name="edit" aria-label="Edit Project" />
+              </Link>
+            </button>
+            {/* MARK - I DON'T THINK I WANT TO GIVE USER'S THE ABILITY TO DELETE THEIR PROJECT */}
+          </div>
         </div>
 
         {/* UPDATES */}
@@ -220,9 +248,14 @@ export default function Me() {
               </div>
             )
           )
-        ) : (
+        ) : // TODO: refactor this code ... it's confusing
+        // IF THE USER HAS CREATED A PROJECT AND THERE ARE NO UPDATES
+        // the user must be logged in, in order to see the add button
+        // this must be this user's project
+        // TODO: THIS MUST BE THE USER"S ACCOUNT TO SEE THE BUTTON
+        data.me.projects.length > 0 &&
+          `/${data.user.username}` === location.pathname ? (
           <div className="col-span-12 grid grid-cols-subgrid relative -top-[150px] lg:-top-[30px]">
-            {/* TODO: Update the design on the empty state */}
             <div className="hidden md:block col-start-2 col-span-3 mr-10 pr-10 border-r-3 border-r-codGray" />
             <div className="col-span-12 px-5 md:px-0 md:col-span-5">
               {!searchParams.get("new") && (
@@ -234,6 +267,26 @@ export default function Me() {
                   Add your First Update
                 </Link>
               )}
+            </div>
+          </div>
+        ) : (
+          <div className="col-span-12 grid grid-cols-subgrid relative -top-[150px] lg:-top-[30px]">
+            <div className="col-span-12 px-5 md:px-0 md:col-start-5 md:col-span-5">
+              {/* IF THIS PROFILE PAGE IS THE LOGGED IN USER'S PROFILE PAGE,
+              THEN SHOW AN ADD AN UPDATE BUTTON */}
+              {!searchParams.get("new") &&
+                `/${data.user.username}` === location.pathname && (
+                  <Link
+                    to="/projects/new"
+                    className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full py-1 uppercase px-4 hover:bg-white mb-5 py-4"
+                  >
+                    <Icon name="plus-circle" className="size-4" />
+                    Add a Project
+                  </Link>
+                )}
+              <p className="font-sans">
+                There are not any updates available yet.
+              </p>
             </div>
           </div>
         )}

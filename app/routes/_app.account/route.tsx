@@ -16,6 +16,9 @@ import { Icon } from "~/components/Icon/Icon";
 import { constants } from "~/lib/constants";
 import { createSupabaseServerClient } from "~/supabase.server";
 
+/** -------------------------------------------------
+* LOADER
+---------------------------------------------------- */
 export async function loader({ request }: LoaderFunctionArgs) {
   // get the data for the current user
   const supabase = createSupabaseServerClient(request);
@@ -46,6 +49,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 }
 
+/** -------------------------------------------------
+* ACTION
+---------------------------------------------------- */
 export async function action({ request }: ActionFunctionArgs) {
   // get all the data from the form submission
   const formData = await request.formData();
@@ -114,6 +120,33 @@ export async function action({ request }: ActionFunctionArgs) {
     message = "Please check your email to confirm the change.";
   }
 
+  const avatar = formData.get("avatar");
+  console.log({ avatar });
+
+  // IF THE USER TRIED TO CHANGE THEIR AVATAR, UPLOAD IT TO SUPABASE
+  if (avatar) {
+    const avatarResults = await supabase.storage
+      .from("avatars")
+      .upload(avatar, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+    console.log({ avatarResults });
+    //   if (avatarResults.error) {
+    //     console.error(avatarResults.error);
+    //     return json({ error: avatarResults.error.message, ok: false });
+    //   }
+    //   const avatarURL = avatarResults.data?.Key;
+    //   const avatarUpdateResults = await supabase
+    //     .from("users")
+    //     .update({ avatar: avatarURL })
+    //     .eq("id", formData.get("id") as string);
+    //   if (avatarUpdateResults.error) {
+    //     console.error(avatarUpdateResults.error);
+    //     return json({ error: avatarUpdateResults.error.message, ok: false });
+    //   }
+  }
+
   // update supabase with the new user data
   // TODO: Make code smart enough to determine if a URL or a handle was entered
   const user = await supabase
@@ -137,6 +170,9 @@ export async function action({ request }: ActionFunctionArgs) {
   return json({ error: message, ok: true });
 }
 
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [
     { title: `${constants.OG_TITLE} :: Edit My Account` },
@@ -148,7 +184,10 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function Index() {
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
+export default function AccountPage() {
   const pageTop = useRef<HTMLDivElement>(null);
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
@@ -175,6 +214,7 @@ export default function Index() {
           key={data.user.id}
           method="post"
           className="col-span-12 px-5 md:px-0 md:col-start-3 md:col-span-7"
+          encType="multipart/form-data"
         >
           <input type="hidden" name="id" value={data.user.id} />
           <fieldset>
@@ -247,7 +287,7 @@ export default function Index() {
               />
             </div>
             <div className="field">
-              <label htmlFor="github">GitHub</label>
+              <label htmlFor="github">GitHub Handle</label>
               <input
                 type="text"
                 name="github"
@@ -260,7 +300,7 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="twitter">Twitter</label>
+              <label htmlFor="twitter">Twitter Handle</label>
               <input
                 type="text"
                 name="twitter"
@@ -273,7 +313,7 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="discord">Discord</label>
+              <label htmlFor="discord">Discord ID</label>
               <input
                 type="text"
                 name="discord"
@@ -286,7 +326,7 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="youtube">YouTube</label>
+              <label htmlFor="youtube">YouTube URL</label>
               <input
                 type="url"
                 name="youtube"
@@ -299,9 +339,9 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="tiktok">Tiktok</label>
+              <label htmlFor="tiktok">Tiktok Handle</label>
               <input
-                type="url"
+                type="text"
                 name="tiktok"
                 id="tiktok"
                 placeholder=""
@@ -312,9 +352,9 @@ export default function Index() {
               </div>
             </div>
             <div className="field">
-              <label htmlFor="linkedin">Linkedin</label>
+              <label htmlFor="linkedin">Linkedin Handle</label>
               <input
-                type="url"
+                type="text"
                 name="linkedin"
                 id="linkedin"
                 placeholder=""
