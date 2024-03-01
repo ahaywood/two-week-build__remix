@@ -16,7 +16,10 @@ const UpdateHeader = () => {
             </li>
             {numberOfUpdates.map((update, index: number) => (
               <li key={index}>
+                {/* MARK - NEED TO MAKE THE DATE DYNAMIC, RIGHT NOW IT'S HARD CODED TO MARCH 2024 */}
                 <UpdateNav
+                  month="3"
+                  year="2024"
                   number={index + 1}
                   status={
                     currentDay === index + 1

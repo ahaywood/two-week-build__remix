@@ -8,6 +8,8 @@ interface ProjectTrackerProps {
 const ProjectTracker = ({ number, status }: ProjectTrackerProps) => {
   if (status === "completed") {
     return (
+      // - [ ] MARK: Link this update to the individual update page
+      // I'll need to do a little bit of work to the Supabase function to get the individual update ID
       <div className="w-8 h-8 aspect-square center border-2 font-mono text-sm font-bold bg-springBud text-black border-springBud">
         <Icon name="check" />
       </div>

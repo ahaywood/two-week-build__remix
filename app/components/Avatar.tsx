@@ -5,7 +5,12 @@ export interface AvatarProps {
   src?: string;
 }
 
-const Avatar = ({ alt, className = "", size = "72px", src }: AvatarProps) => {
+const Avatar = ({
+  alt,
+  className = "",
+  size = "72px",
+  src = "",
+}: AvatarProps) => {
   const firstLetter = (str: string) => {
     if (!str) return "🤪";
     return str.charAt(0).toUpperCase();

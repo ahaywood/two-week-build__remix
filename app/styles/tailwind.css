@@ -289,7 +289,7 @@
   }
 
   .banner h1 {
-    @apply text-black font-mono text-[48px] md:text-[72px] lg:text-[125px] leading-[0.9] tracking-tight
+    @apply text-black font-mono text-[48px] lg:text-[72px] xl:text-[125px] leading-[0.9] tracking-tight
   }
 
   /* dropdown menu */

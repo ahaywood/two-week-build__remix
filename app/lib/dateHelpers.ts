@@ -1,4 +1,4 @@
-import { formatDistance, formatDistanceToNow, parseISO } from "date-fns";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 export const currentMonth = new Date().getMonth();
 export const currentDay = new Date().getDate();
@@ -68,3 +68,12 @@ export const relativeTime = (timestamp: string) => {
   return formatDistanceToNow(date, { addSuffix: true });
 }
 
+/**
+ * Takes a date, like 2024-03-12 and returns a long date like March 12, 2024
+ * @param string - date in the format of "2024-03-12"
+ * @returns string - like "March 12, 2024"
+ */
+export const getLongDate = (date: string) => {
+  const [day, month, year] = getDateArray(date);
+  return `${getFullMonthName(parseInt(month))} ${parseInt(day)}, ${year}`;
+}

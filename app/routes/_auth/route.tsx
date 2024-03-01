@@ -6,17 +6,18 @@ import { createSupabaseServerClient } from "~/supabase.server";
 import { constants } from "~/lib/constants";
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  // get the current user
-  const supabase = createSupabaseServerClient(request);
-  const { data, error } = await supabase.auth.getUser();
-  if (error) console.error(error);
+  // // get the current user
+  // const supabase = createSupabaseServerClient(request);
+  // const { data, error } = await supabase.auth.getUser();
+  // if (error) console.error(error);
 
-  // if the user is logged in, you can redirect them to the updates page
-  if (data?.user) {
-    return redirect("/updates");
-  }
+  // // if the user is logged in, you can redirect them to the updates page
+  // if (data?.user) {
+  //   return redirect("/updates");
+  // }
 
-  return { data };
+  // return { data };
+  return {};
 }
 
 export const meta: MetaFunction = () => {
