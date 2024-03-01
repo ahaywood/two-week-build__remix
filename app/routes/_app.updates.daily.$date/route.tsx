@@ -6,7 +6,6 @@
 
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/supabase.server";
-import { UpdateHeader } from "~/components/UpdateHeader";
 import { Update } from "~/components/Update";
 import { useLoaderData } from "@remix-run/react";
 import { getTheCurrentUserId } from "~/lib/getCurrentUserId.server";
