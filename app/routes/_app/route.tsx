@@ -90,10 +90,10 @@ export default function Index() {
           {/* bottom navigation */}
           {data?.user?.email && (
             <div className="p-3 hidden lg:block">
-              {data?.user?.projects?.length < 1 ? (
-                <AddUpdateButton currentUsername={data?.username} />
-              ) : (
+              {data?.projects?.length < 1 ? (
                 <AddProjectButton />
+              ) : (
+                <AddUpdateButton currentUsername={data?.username} />
               )}
               <div className="flex gap-2 justify-between items-center">
                 <MyAccount
