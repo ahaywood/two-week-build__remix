@@ -1,8 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { EditProfileButton } from "~/components/EditProfileButton";
 import Footer from "~/components/Footer";
-import { Icon } from "~/components/Icon/Icon";
 import { LoginButton } from "~/components/LoginButton";
 import Newsletter from "~/components/Newsletter";
 import { Search } from "~/components/Search";
