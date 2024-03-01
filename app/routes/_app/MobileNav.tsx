@@ -8,6 +8,8 @@ import { SignUpButton } from "~/components/SignUpButton";
 import { LogoutButton } from "~/components/LogoutButton";
 import { Search } from "~/components/Search";
 import { EditProfileButton } from "~/components/EditProfileButton";
+import { AddUpdateButton } from "./AddUpdateButton";
+import { Link } from "@remix-run/react";
 
 interface MobileNavProps {
   pathname: string;
@@ -70,7 +72,8 @@ const MobileNav = ({
           />
         </ul>
 
-        <ul>
+        {/* LOGIN & SIGN UP BUTTONS */}
+        <ul className="flex gap-4 flex-wrap justify-center">
           {!isUserLoggedIn && (
             <li className="flex gap-5 justify-center">
               <LoginButton
@@ -80,23 +83,45 @@ const MobileNav = ({
               <SignUpButton callback={() => setIsNavShowing(false)} />
             </li>
           )}
+
+          {/* EDIT PROFILE BUTTON */}
           {username && (
-            <li className="text-center flex justify-center">
-              <div className="max-w-[200px] mx-auto relative">
-                <EditProfileButton
-                  username={username}
-                  callback={() => {
-                    setIsNavShowing(false);
-                  }}
-                />
-              </div>
-            </li>
+            <>
+              <li className="text-center flex justify-center">
+                <div className="max-w-[220px] mx-auto relative">
+                  {/* I'm not using the AddUpdate Button because I need the Link to be Styled a little different for mobile nav */}
+                  <Link
+                    to={`/${username}?new=true#new`}
+                    className="button bg-springBud text-black center whitespace-nowrap uppercase hover:bg-white px-6"
+                  >
+                    <Icon name="plus-circle" size="lg">
+                      Add an Update
+                    </Icon>
+                  </Link>
+                </div>
+              </li>
+
+              <li className="text-center flex justify-center">
+                <div className="max-w-[200px] mx-auto relative">
+                  <EditProfileButton
+                    username={username}
+                    callback={() => {
+                      setIsNavShowing(false);
+                    }}
+                  />
+                </div>
+              </li>
+            </>
           )}
+
+          {/* LOGOUT */}
           {isUserLoggedIn && (
             <li>
               <LogoutButton className="bg-codGray button uppercase center mx-auto relative" />
             </li>
           )}
+
+          {/* SEARCH */}
           <li className="flex justify-center">
             <Search />
           </li>
