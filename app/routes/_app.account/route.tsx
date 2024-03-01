@@ -367,7 +367,6 @@ export default function AccountPage() {
               <input
                 type="file"
                 name="avatar"
-                defaultValue={data.user.avatar}
                 className="border-2 border-dashed border-white px-4 py-6 rounded-full w-full"
               />
             </div>
