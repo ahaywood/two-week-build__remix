@@ -122,8 +122,8 @@ export default function Login() {
           <Icon name="arrow" />
         </button>
         <p className="text-center">
-          NEED AN ACCOUNT?{" "}
-          <strong>
+          <span className="block md:inline">NEED AN ACCOUNT? </span>
+          <strong className="block md:inline">
             <Link
               to="/register"
               className="border-b-battleshipGray border-b-2 hover:text-springBud"

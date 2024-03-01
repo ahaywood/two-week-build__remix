@@ -319,11 +319,20 @@
     @apply w-full overflow-scroll bg-yellow-400 text-black p-10;
   }
 
-  .background-authArrow {
-    background-image: url('/images/arrow--auth.svg');
-    background-position: 120% 65px;
-    background-repeat: no-repeat;
+  @media (min-width: 768px) {
+    .background-arrowAuth {
+      background-image: url('/images/arrow--auth.svg');
+      background-position: 75vw 65px;
+      background-repeat: no-repeat;
+    }
   }
+
+  @media (min-width: 1024px) {
+    .background-arrowAuth {
+      background-position: 67vw 65px;
+    }
+  }
+
 }
 
 @layer utilities {
