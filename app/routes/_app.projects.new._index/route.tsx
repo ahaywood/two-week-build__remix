@@ -1,6 +1,3 @@
-// TODO
-// - [ ] Handle the form
-
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
