@@ -2,7 +2,11 @@ import { createSupabaseBrowserClient } from "~/supabase.client";
 import { Icon } from "./Icon";
 import { useNavigate } from "@remix-run/react";
 
-const LogoutButton = () => {
+interface LogoutButtonProps {
+  className?: string;
+}
+
+const LogoutButton = ({ className = "" }: LogoutButtonProps) => {
   const navigate = useNavigate();
 
   const logout = async () => {
@@ -13,8 +17,14 @@ const LogoutButton = () => {
   };
 
   return (
-    <button type="submit" className="menu-item" onClick={logout}>
-      <Icon name="logout">Logout</Icon>
+    <button
+      type="submit"
+      className={`menu-item ${className ? className : ""}`}
+      onClick={logout}
+    >
+      <Icon name="logout" size="lg">
+        Logout
+      </Icon>
     </button>
   );
 };

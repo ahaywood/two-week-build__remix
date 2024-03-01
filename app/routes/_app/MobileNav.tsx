@@ -81,18 +81,20 @@ const MobileNav = ({
             </li>
           )}
           {username && (
-            <li>
-              <EditProfileButton
-                username={username}
-                callback={() => {
-                  setIsNavShowing(false);
-                }}
-              />
+            <li className="text-center flex justify-center">
+              <div className="max-w-[200px] mx-auto relative">
+                <EditProfileButton
+                  username={username}
+                  callback={() => {
+                    setIsNavShowing(false);
+                  }}
+                />
+              </div>
             </li>
           )}
           {isUserLoggedIn && (
             <li>
-              <LogoutButton />
+              <LogoutButton className="bg-codGray button uppercase center mx-auto relative" />
             </li>
           )}
           <li className="flex justify-center">
