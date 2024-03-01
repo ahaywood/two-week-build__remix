@@ -28,10 +28,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (error) console.error(error);
 
   // get all of the data for the current user
-  const cohort = params.cohort as string;
-  console.log({ COHORT: cohort });
   const username = params.profile as string;
-  // ! TODO: Need to make sure this works if I introduce pagination
   const result = await supabase
     .from("users")
     .select(
@@ -47,10 +44,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     })
     .limit(1, { referencedTable: "projects" })
     .eq("username", username)
-    .eq("projects.cohort_id", cohort)
+    .eq("projects.id", params.project as string)
     .single();
   if (result.error) throw error;
-  console.log({ data: result.data.projects[0] });
 
   // if there's no user, redirect to the login page
   if (result.data.user === null) return redirect("/user-not-found");
@@ -149,7 +145,7 @@ export const meta = ({ data }: MetaFunctionArgs) => {
     {
       title: `${constants.OG_TITLE} :: ${
         data?.data?.me?.username && data.data.me.username
-      }`,
+      } - ${data?.data?.me?.projects[0].name && data.data.me.projects[0].name}`,
     },
     {
       name: "description",

@@ -23,6 +23,7 @@ export default function Index() {
   const inputForm = useRef<HTMLFormElement>();
   const firstField = useRef<HTMLInputElement>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const supabase = createSupabaseBrowserClient();
 
@@ -36,7 +37,7 @@ export default function Index() {
     const formData = new FormData(inputForm.current);
     const dataFields = Object.fromEntries(formData.entries());
 
-    const { data, error } = await supabase.auth.resetPasswordForEmail(
+    const { error } = await supabase.auth.resetPasswordForEmail(
       dataFields.email as string,
       {
         redirectTo: `${constants.BASE_URL}/reset-password`,
@@ -44,6 +45,7 @@ export default function Index() {
     );
     if (error) {
       console.error(error);
+      setErrorMessage(error.message);
       return;
     }
     setIsSuccess(true);
@@ -57,6 +59,7 @@ export default function Index() {
           We emailed you a link to reset your password. Please check your inbox.
         </div>
       )}
+      {errorMessage && <div className="alert bg-error">{errorMessage}</div>}
       <Form
         method="post"
         className="pt-3"

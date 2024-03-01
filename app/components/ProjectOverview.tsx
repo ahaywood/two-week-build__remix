@@ -34,35 +34,35 @@ const ProjectOverview = ({
           <div className="font-sans text-battleshipGray">
             {isProfileDetailsShowing && (
               <>
-                <a
-                  href={`/${user?.username && user.username}`}
+                <Link
+                  to={`/${user?.username && user.username}`}
                   className="font-bold underline hover:text-white inline-block mb-4"
                 >
                   <strong>{user?.name && user.name}</strong>
-                </a>{" "}
+                </Link>{" "}
                 &bull;{" "}
-                <a href={`/${user?.username && user.username}`}>
+                <Link to={`/${user?.username && user.username}`}>
                   @{user?.username && user.username}
-                </a>
+                </Link>
               </>
             )}
           </div>
           <div>
             {isUpdatesLinkShowing && (
-              <a
-                href={`/${user?.username && user.username}`}
+              <Link
+                to={`/${user?.username && user.username}`}
                 className="flex text-springBud items-center hover:text-white mb-4"
               >
                 <Icon name="arrow" size="lg">
                   UPDATES
                 </Icon>
-              </a>
+              </Link>
             )}
           </div>
         </div>
         <h2 className="font-sans font-bold text-lg md:text-2xl">
           <Link
-            to={`/${user.username}/${project?.cohorts?.id}`}
+            to={`/${user.username}/${project?.id}`}
             className="hover:text-springBud"
           >
             {project?.name && project.name}

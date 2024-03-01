@@ -1,13 +1,19 @@
+/**
+ * TODO
+ * - [ ] Hide users that don't have _any_ updates
+ * - [ ] Fix TypeScript Error below
+ */
+
 import Banner from "~/components/Banner";
 import { LeaderboardListItem } from "./LeaderboardListItem";
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/supabase.server";
 import { useLoaderData } from "@remix-run/react";
+import { constants } from "~/lib/constants";
 
 /**
- *
+ * TODO: Add additional information to the comments / documentation
  * Here's the custom query that I set up within Supabase
- *
  */
 
 interface ProjectUpdateCountTypes {
@@ -42,6 +48,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return { data: mergedProjects };
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: `${constants.OG_TITLE} :: Leaderboard` },
+    {
+      name: "description",
+      content:
+        "Our leaderboard is where ambition meets inspiration. See where participants stand with live updates showcasing every leap and bound.",
+    },
+  ];
+};
 
 export default function Index() {
   const { data } = useLoaderData<typeof loader>();

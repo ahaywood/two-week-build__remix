@@ -1,11 +1,12 @@
 // TODO
 // - [ ] Pagination
 
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Banner from "~/components/Banner";
 import { ProjectOverview } from "../../components/ProjectOverview";
 import { createSupabaseServerClient } from "~/supabase.server";
+import { constants } from "~/lib/constants";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
@@ -18,6 +19,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   return { data };
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: `${constants.OG_TITLE} :: All Projects` },
+    {
+      name: "description",
+      content:
+        "Take a look at all the projects being built within the Two Week Build Challenge. Each project is a testament to what can be achieved when creativity is bound by time but not by imagination.",
+    },
+  ];
+};
 
 export default function Index() {
   const { data } = useLoaderData<typeof loader>();

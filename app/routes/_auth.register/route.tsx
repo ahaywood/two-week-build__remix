@@ -3,6 +3,9 @@ import { Form, Link, MetaFunction } from "@remix-run/react";
 import { Icon } from "~/components/Icon";
 import { constants } from "~/lib/constants";
 
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [
     { title: `${constants.OG_TITLE} :: Register` },
@@ -14,7 +17,10 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function Index() {
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
+export default function RegisterPage() {
   const inputForm = useRef(null);
   const [isSuccess, setIsSuccess] = useState(false);
 

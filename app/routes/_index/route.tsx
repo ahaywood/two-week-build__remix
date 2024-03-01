@@ -9,6 +9,9 @@ import { Search } from "~/components/Search";
 import { SignUpButton } from "~/components/SignUpButton";
 import { createSupabaseServerClient } from "~/supabase.server";
 
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [
     { title: "Two Week Build" },
@@ -19,7 +22,9 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   // Determine whether the user is logged in or not
   const supabase = createSupabaseServerClient(request);

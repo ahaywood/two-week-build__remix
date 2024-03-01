@@ -10,29 +10,28 @@ declare global {
 
 export type User = {
   id: string,
-  created_at: string,
+  created_at?: string,
   name: string,
-  location: string,
-  website: string,
-  name: string,
-  github: string,
-  twitter: string,
-  youtube: string,
-  discord: string,
-  tiktok: string,
-  linkedin: string,
-  avatar: string,
-  username: string,
-  projects: Project[]
+  location?: string,
+  website?: string,
+  github?: string,
+  twitter?: string,
+  youtube?: string,
+  discord?: string,
+  tiktok?: string,
+  linkedin?: string,
+  avatar?: string,
+  username?: string,
+  projects?: Project[]
 }
 
 export type Project = {
   id: string,
   name: string,
-  updates: Update[],
-  user_id: string,
-  cohort_id: string,
-  created_at: string,
+  updates?: Update[],
+  user_id?: string,
+  cohort_id?: string,
+  created_at?: string,
   description: string
   cohorts?: Cohort
 }

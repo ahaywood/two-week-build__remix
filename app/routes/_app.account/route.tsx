@@ -5,6 +5,7 @@
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  MetaFunction,
   json,
   redirect,
 } from "@remix-run/node";
@@ -12,6 +13,7 @@ import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { useRef } from "react";
 import Banner from "~/components/Banner";
 import { Icon } from "~/components/Icon/Icon";
+import { constants } from "~/lib/constants";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -47,6 +49,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   // get all the data from the form submission
   const formData = await request.formData();
+
+  // if there is no username
+  if (formData.get("username") === "") {
+    console.error("You have to have a username.");
+    return json({ error: "The username is required.", ok: false });
+  }
+
+  // if there's no email address
+  if (formData.get("email") === "") {
+    console.error("You have to have an email.");
+    return json({ error: "The email is required.", ok: false });
+  }
 
   // if the user tried to update their password, make sure they entered it twice
   if (formData.get("password") !== formData.get("confirmPassword")) {
@@ -122,6 +136,17 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   return json({ error: message, ok: true });
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: `${constants.OG_TITLE} :: Edit My Account` },
+    {
+      name: "description",
+      content:
+        "Update your account information, tweak your settings, and customize your experience to match your building journey.",
+    },
+  ];
+};
 
 export default function Index() {
   const pageTop = useRef<HTMLDivElement>(null);

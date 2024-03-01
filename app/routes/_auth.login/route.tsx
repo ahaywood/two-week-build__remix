@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/tabindex-no-positive */
 // TODO
 // - Responsive Pass
-// - SEO Pass
 
 import { type MetaFunction } from "@remix-run/node";
 import { Form, Link, useNavigate } from "@remix-run/react";
@@ -11,6 +10,9 @@ import { Icon } from "~/components/Icon/Icon";
 import { constants } from "~/lib/constants";
 import { createSupabaseBrowserClient } from "~/supabase.client";
 
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [
     { title: `${constants.OG_TITLE} :: Login` },
@@ -22,6 +24,9 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function Login() {
   const inputForm = useRef<HTMLFormElement>();
   const firstField = useRef<HTMLInputElement>(null);

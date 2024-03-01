@@ -11,7 +11,12 @@ import { useLoaderData } from "@remix-run/react";
 import { getTheCurrentUserId } from "~/lib/getCurrentUserId.server";
 import Banner from "~/components/Banner";
 import { getLongDate } from "~/lib/dateHelpers";
+import { constants } from "~/lib/constants";
+import type { Update as UpdateType } from "~/global.d";
 
+/** -------------------------------------------------
+* LOADER
+---------------------------------------------------- */
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
   const currentUserId = await getTheCurrentUserId(request);
@@ -48,6 +53,37 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return { data: updatesWithEmojis, currentUserId, date };
 }
 
+/** -------------------------------------------------
+*  Meta Data
+---------------------------------------------------- */
+export const meta = ({
+  data,
+}: {
+  data: {
+    data: {
+      updatesWithEmojis: UpdateType[];
+    };
+    currentUserId: string;
+    date: string;
+  };
+}) => {
+  return [
+    {
+      title: `${constants.OG_TITLE} :: Daily Updates for ${getLongDate(
+        data.date
+      )}`,
+    },
+    {
+      name: "description",
+      content:
+        "Add your project. Share your idea, set your goals, and start the clock. Our community is here to cheer you on every step of the way. ",
+    },
+  ];
+};
+
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function DailyUpdates() {
   const { data, currentUserId, date } = useLoaderData<typeof loader>();
 

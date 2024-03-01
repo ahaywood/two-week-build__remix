@@ -12,6 +12,7 @@ import { MyAccount } from "./MyAccount";
 import { LoginButton } from "~/components/LoginButton";
 import { EditProfileButton } from "~/components/EditProfileButton";
 import { constants } from "~/lib/constants";
+import { AddProjectButton } from "./AddProjectButton";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // get the current Supabase user session
@@ -25,7 +26,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // get the details for the current, logged in user
     result = await supabase
       .from("users")
-      .select("name, username, avatar")
+      .select("name, username, avatar, projects(id)")
       .eq("auth_id", data.user.id)
       .single();
   }
@@ -89,7 +90,11 @@ export default function Index() {
           {/* bottom navigation */}
           {data?.user?.email && (
             <div className="p-3 hidden lg:block">
-              <AddUpdateButton currentUsername={data?.username} />
+              {data?.user?.projects?.length < 1 ? (
+                <AddUpdateButton currentUsername={data?.username} />
+              ) : (
+                <AddProjectButton />
+              )}
               <div className="flex gap-2 justify-between items-center">
                 <MyAccount
                   name={data.name}

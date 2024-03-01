@@ -3,13 +3,17 @@
 // - Handle empty return
 // - Too much empty space around the date in responsive view
 
-import { LoaderFunctionArgs } from "@remix-run/node";
+import { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { createSupabaseServerClient } from "~/supabase.server";
 import { UpdateHeader } from "~/components/UpdateHeader";
 import { Update } from "~/components/Update";
 import { useLoaderData } from "@remix-run/react";
 import { getTheCurrentUserId } from "~/lib/getCurrentUserId.server";
+import { constants } from "~/lib/constants";
 
+/** -------------------------------------------------
+* LOADER
+---------------------------------------------------- */
 export async function loader({ request }: LoaderFunctionArgs) {
   const supabase = createSupabaseServerClient(request);
   const currentUserId = await getTheCurrentUserId(request);
@@ -39,6 +43,23 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return { data: updatesWithEmojis, currentUserId };
 }
 
+/** -------------------------------------------------
+*  Meta Data
+---------------------------------------------------- */
+export const meta: MetaFunction = () => {
+  return [
+    { title: `${constants.OG_TITLE} :: All Updates` },
+    {
+      name: "description",
+      content:
+        "Stay in the loop with every twist with all the updates, across all projects. Witness the pulse of creativity as it happens, with feeds of breakthroughs, milestones, and, yes, even the thrilling last-minute finishes. From the first line of code to the final touches on a design masterpiece, this is where the heart of the 'Two Week Build' beats the loudest. Dive into the stories behind the projects, celebrate every achievement, and maybe find the spark for your next big idea. The journey of a thousand builds starts with a single update.",
+    },
+  ];
+};
+
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function AllUpdates() {
   const { data, currentUserId } = useLoaderData<typeof loader>();
 

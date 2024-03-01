@@ -28,7 +28,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (error) console.error(error);
 
   // get the current user id
-  const;
 
   // get all the updates
   const AllUpdatesResults = await supabase
