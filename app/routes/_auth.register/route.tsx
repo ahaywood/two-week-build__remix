@@ -17,6 +17,15 @@ export async function action({ request }: ActionFunctionArgs) {
   const username = formData.get("username");
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
+  const location = formData.get("location");
+  const website = formData.get("website");
+  const github = formData.get("github");
+  const twitter = formData.get("twitter");
+  const discord = formData.get("discord");
+  const youtube = formData.get("youtube");
+  const tiktok = formData.get("tiktok");
+  const linkedin = formData.get("linkedin");
+  // const avatar = formData.get("avatar");
 
   // passwords must match
   if (password !== confirmPassword) {
@@ -43,7 +52,21 @@ export async function action({ request }: ActionFunctionArgs) {
   // create a user profile
   const userProfileResults = await supabase
     .from("users")
-    .insert([{ username, name, auth_id: authResults.data.user?.id }])
+    .insert([
+      {
+        username,
+        name,
+        auth_id: authResults.data.user?.id,
+        location,
+        website,
+        github,
+        twitter,
+        discord,
+        youtube,
+        tiktok,
+        linkedin,
+      },
+    ])
     .single();
   // check for errors
   if (userProfileResults.error) {
@@ -149,30 +172,51 @@ export default function RegisterPage() {
         <div className="field">
           <label htmlFor="website">Your Website</label>
           <input type="url" name="website" id="website" placeholder="" />
+          <div className="icon">
+            <Icon name="link" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="github">GitHub</label>
-          <input type="url" name="github" id="github" placeholder="" />
+          <label htmlFor="github">GitHub Handle</label>
+          <input type="text" name="github" id="github" placeholder="" />
+          <div className="icon">
+            <Icon name="github" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="twitter">Twitter</label>
-          <input type="url" name="twitter" id="twitter" placeholder="" />
+          <label htmlFor="twitter">Twitter / X Handle</label>
+          <input type="text" name="twitter" id="twitter" placeholder="" />
+          <div className="icon">
+            <Icon name="x" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="discord">Discord</label>
-          <input type="url" name="discord" id="discord" placeholder="" />
+          <label htmlFor="discord">Discord ID</label>
+          <input type="text" name="discord" id="discord" placeholder="" />
+          <div className="icon">
+            <Icon name="discord" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="youtube">Youtube</label>
+          <label htmlFor="youtube">YouTube URL</label>
           <input type="url" name="youtube" id="youtube" placeholder="" />
+          <div className="icon">
+            <Icon name="youtube" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="tiktok">TikTok</label>
-          <input type="url" name="tiktok" id="tiktok" placeholder="" />
+          <label htmlFor="tiktok">TikTok Handle Handle</label>
+          <input type="text" name="tiktok" id="tiktok" placeholder="" />
+          <div className="icon">
+            <Icon name="tiktok" size="xl" />
+          </div>
         </div>
         <div className="field">
-          <label htmlFor="linkedin">LinkedIn</label>
-          <input type="url" name="linkedin" id="linkedin" placeholder="" />
+          <label htmlFor="linkedin">LinkedIn Handle</label>
+          <input type="text" name="linkedin" id="linkedin" placeholder="" />
+          <div className="icon">
+            <Icon name="linkedin" size="xl" />
+          </div>
         </div>
         <div className="field">
           <label htmlFor="avatar">Your Avatar</label>
