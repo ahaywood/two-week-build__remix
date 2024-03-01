@@ -25,7 +25,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const youtube = formData.get("youtube");
   const tiktok = formData.get("tiktok");
   const linkedin = formData.get("linkedin");
-  // const avatar = formData.get("avatar");
+  // the policy is set so that only authenticated users can upload an avatar
 
   // passwords must match
   if (password !== confirmPassword) {
@@ -217,15 +217,6 @@ export default function RegisterPage() {
           <div className="icon">
             <Icon name="linkedin" size="xl" />
           </div>
-        </div>
-        <div className="field">
-          <label htmlFor="avatar">Your Avatar</label>
-          <input
-            type="file"
-            name="avatar"
-            defaultValue=""
-            className="border-2 border-dashed border-white px-4 py-6 rounded-full w-full"
-          />
         </div>
         <button type="submit" className="auth-button">
           SUBMIT

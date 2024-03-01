@@ -55,6 +55,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export async function action({ request }: ActionFunctionArgs) {
   // get all the data from the form submission
   const formData = await request.formData();
+  const currentUserId = formData.get("id");
 
   // if there is no username
   if (formData.get("username") === "") {
@@ -120,31 +121,26 @@ export async function action({ request }: ActionFunctionArgs) {
     message = "Please check your email to confirm the change.";
   }
 
-  const avatar = formData.get("avatar");
-  console.log({ avatar });
+  const avatar = formData.get("avatar") as File | null;
 
   // IF THE USER TRIED TO CHANGE THEIR AVATAR, UPLOAD IT TO SUPABASE
+  let avatarUrl = "";
   if (avatar) {
-    const avatarResults = await supabase.storage
-      .from("avatars")
-      .upload(avatar, {
-        cacheControl: "3600",
-        upsert: true,
-      });
-    console.log({ avatarResults });
-    //   if (avatarResults.error) {
-    //     console.error(avatarResults.error);
-    //     return json({ error: avatarResults.error.message, ok: false });
-    //   }
-    //   const avatarURL = avatarResults.data?.Key;
-    //   const avatarUpdateResults = await supabase
-    //     .from("users")
-    //     .update({ avatar: avatarURL })
-    //     .eq("id", formData.get("id") as string);
-    //   if (avatarUpdateResults.error) {
-    //     console.error(avatarUpdateResults.error);
-    //     return json({ error: avatarUpdateResults.error.message, ok: false });
-    //   }
+    const bytes = await avatar.arrayBuffer();
+    const bucket = supabase.storage.from("avatars");
+    const extension = avatar.name.split(".").pop();
+    const fileName = `${currentUserId}.${extension}`;
+
+    const avatarResults = await bucket.upload(fileName, bytes, {
+      upsert: true,
+    });
+    if (avatarResults.error) {
+      console.error(avatarResults.error);
+      return json({ error: avatarResults.error.message, ok: false });
+    }
+    avatarUrl = bucket.getPublicUrl(fileName).data.publicUrl;
+  } else {
+    avatarUrl = formData.get("oldAvatar") as string;
   }
 
   // update supabase with the new user data
@@ -161,8 +157,9 @@ export async function action({ request }: ActionFunctionArgs) {
       website: formData.get("website") as string,
       tiktok: formData.get("tiktok") as string,
       linkedin: formData.get("linkedin") as string,
+      avatar: avatarUrl,
     })
-    .eq("id", formData.get("id") as string);
+    .eq("id", currentUserId as string);
   if (user.error) {
     console.error(user.error);
     json({ error: user.error?.message, ok: false });
@@ -366,10 +363,11 @@ export default function AccountPage() {
             </div>
             <div className="field">
               <label htmlFor="avatar">Your Avatar</label>
+              <input type="hidden" name="oldAvatar" value={data.user.avatar} />
               <input
                 type="file"
                 name="avatar"
-                defaultValue=""
+                defaultValue={data.user.avatar}
                 className="border-2 border-dashed border-white px-4 py-6 rounded-full w-full"
               />
             </div>
