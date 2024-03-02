@@ -138,14 +138,10 @@ const Update = ({
         {/* BIO */}
         {isBioShowing && (
           <div className="bg-licorice p-3 mb-10 relative flex items-center gap-5">
-            <Avatar
-              alt="A"
-              size="72px"
-              src="https://picsum.photos/seed/1706285540310/300/300"
-            />
+            <Avatar alt={user.name} size="72px" src={user.avatar} />
             <div>
               <Link
-                to={`/${user.username}/1`}
+                to={`/${user.username}`}
                 className="text-chicago text-2xl mb-1 !border-b-0 no-underline"
               >
                 <strong className="text-springBud font-bold">
@@ -155,7 +151,7 @@ const Update = ({
               </Link>
               <div>
                 I&apos;m building{" "}
-                <Link to={`/profile/${user.username}/1`}>
+                <Link to={`/profile/${user.username}`}>
                   {update?.projects?.name}
                 </Link>
                 .
