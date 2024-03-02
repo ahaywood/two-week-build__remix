@@ -120,13 +120,6 @@ export default function Index() {
         <main className="lg:pl-[200px] pt-[20px] lg:pt-[80px]">
           <Outlet />
 
-          {/*} if the user is not logged in, show an option to sign up at the bottom of the page */}
-          {!data?.user?.email && (
-            <section className="border-t-[3px] border-t-mineShaft pt-[100px] text-center w-full overflow-x-hidden">
-              <Newsletter />
-            </section>
-          )}
-
           <Footer />
         </main>
       </div>
