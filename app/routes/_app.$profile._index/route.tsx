@@ -188,30 +188,30 @@ export default function Me() {
       <ProfileHeader user={data.me} />
       {/* The gap here controls the spacing between each of the updates */}
       <div className="page-grid gap-y-[200px] lg:gap-y-[80px] mb-[100px] md:mb-10">
-        <div className="md:col-start-5 md:col-span-7 col-span-12 p-5 md:p-0 relative">
-          {/* TODO: Make sure it is only returning the most recent project */}
-          {/* TODO: Add navigation at the top for all the cohorts that someone has participated in */}
-          {data.me.projects[0] && data.user.email && (
+        {data.me.projects[0] && data.user.email && (
+          <div className="md:col-start-5 md:col-span-7 col-span-12 p-5 md:p-0 relative">
+            {/* TODO: Make sure it is only returning the most recent project */}
+            {/* TODO: Add navigation at the top for all the cohorts that someone has participated in */}
             <ProjectOverview
               project={data.me.projects[0]}
               user={data.me}
               isAvatarShowing={false}
             />
-          )}
 
-          {/* if this is the logged in user's profile page, then give them buttons to edit their project */}
-          <div className="absolute right-0 bottom-0 flex gap-2">
-            <button className="square-button">
-              <Link
-                to={`/projects/edit/${data.me.projects[0].id}`}
-                className="bg-chicago size-8 hover:bg-springBud hover:text-black"
-              >
-                <Icon name="edit" aria-label="Edit Project" />
-              </Link>
-            </button>
-            {/* MARK - I DON'T THINK I WANT TO GIVE USER'S THE ABILITY TO DELETE THEIR PROJECT */}
+            {/* if this is the logged in user's profile page, then give them buttons to edit their project */}
+            <div className="absolute right-0 bottom-0 flex gap-2">
+              <button className="square-button">
+                <Link
+                  to={`/projects/edit/${data.me.projects[0].id}`}
+                  className="bg-chicago size-8 hover:bg-springBud hover:text-black"
+                >
+                  <Icon name="edit" aria-label="Edit Project" />
+                </Link>
+              </button>
+              {/* MARK - I DON'T THINK I WANT TO GIVE USER'S THE ABILITY TO DELETE THEIR PROJECT */}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* UPDATES */}
         {/* SHOW NEW UPDATE FORM */}
