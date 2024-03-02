@@ -47,5 +47,6 @@ export default {
       emoji: ['Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol']
     }
   },
+  safelist: ['kw-alert'],
   plugins: [],
 } satisfies Config

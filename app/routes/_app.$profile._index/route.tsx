@@ -269,7 +269,7 @@ export default function Me() {
             </div>
           </div>
         ) : (
-          <div className="col-span-12 grid grid-cols-subgrid relative -top-[150px] lg:-top-[30px]">
+          <div className="col-span-12 grid grid-cols-subgrid relative lg:-top-[30px]">
             <div className="col-span-12 px-5 md:px-0 md:col-start-5 md:col-span-5">
               {/* IF THIS PROFILE PAGE IS THE LOGGED IN USER'S PROFILE PAGE,
               THEN SHOW AN ADD AN UPDATE BUTTON */}

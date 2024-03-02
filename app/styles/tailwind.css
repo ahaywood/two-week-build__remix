@@ -333,6 +333,9 @@
     }
   }
 
+  .kw-alert {
+    @apply mb-[35px]
+  }
 }
 
 @layer utilities {
