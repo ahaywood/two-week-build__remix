@@ -42,6 +42,9 @@ export async function action({ request }: ActionFunctionArgs) {
   const authResults = await supabase.auth.signUp({
     email: email as string,
     password: password as string,
+    options: {
+      emailRedirectTo: `${constants.BASE_URL}/login`,
+    },
   });
   if (authResults.error) {
     console.error(authResults.error);
