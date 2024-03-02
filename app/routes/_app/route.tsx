@@ -15,6 +15,9 @@ import { constants } from "~/lib/constants";
 import { AddProjectButton } from "./AddProjectButton";
 import { SignUpButton } from "~/components/SignUpButton";
 
+/** -------------------------------------------------
+* LOADER
+---------------------------------------------------- */
 export async function loader({ request }: LoaderFunctionArgs) {
   // get the current Supabase user session
   const supabase = createSupabaseServerClient(request);
@@ -44,10 +47,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
   };
 }
 
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [{ "og:image": constants.OG_IMAGE }];
 };
 
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function Index() {
   const { data } = useLoaderData<typeof loader>();
   const location = useLocation();

@@ -1,31 +1,20 @@
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import Footer from "~/components/Footer";
 import { MobileNav } from "../_app/MobileNav";
-import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
-import { createSupabaseServerClient } from "~/supabase.server";
+import { MetaFunction } from "@remix-run/node";
 import { constants } from "~/lib/constants";
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  // // get the current user
-  // const supabase = createSupabaseServerClient(request);
-  // const { data, error } = await supabase.auth.getUser();
-  // if (error) console.error(error);
-
-  // // if the user is logged in, you can redirect them to the updates page
-  // if (data?.user) {
-  //   return redirect("/updates");
-  // }
-
-  // return { data };
-  return {};
-}
-
+/** -------------------------------------------------
+* META DATA
+---------------------------------------------------- */
 export const meta: MetaFunction = () => {
   return [{ "og:image": constants.OG_IMAGE }];
 };
 
+/** -------------------------------------------------
+* COMPONENT
+---------------------------------------------------- */
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>();
   const location = useLocation();
 
   return (
@@ -39,7 +28,7 @@ export default function Index() {
           isUserLoggedIn={false}
           username={""}
         />
-        <aside className="p-8 fixed">
+        <aside className="p-8 absolute md:fixed top-0 left-0">
           <a href="/">
             <img src="/images/logo.svg" alt="Two Week Build Challenge" />
           </a>
