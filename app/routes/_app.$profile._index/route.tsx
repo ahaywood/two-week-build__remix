@@ -269,7 +269,7 @@ export default function Me() {
             </div>
           </div>
         ) : (
-          <div className="col-span-12 grid grid-cols-subgrid relative lg:-top-[30px]">
+          <div className="col-span-12 grid grid-cols-subgrid relative">
             <div className="col-span-12 px-5 md:px-0 md:col-start-5 md:col-span-5">
               {/* IF THIS PROFILE PAGE IS THE LOGGED IN USER'S PROFILE PAGE,
               THEN SHOW AN ADD AN UPDATE BUTTON */}
@@ -277,7 +277,7 @@ export default function Me() {
                 `/${data.user.username}` === location.pathname && (
                   <Link
                     to="/projects/new"
-                    className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full py-1 uppercase px-4 hover:bg-white mb-5 py-4"
+                    className="with-icon bg-springBud text-black center whitespace-nowrap text-sm w-full uppercase px-4 hover:bg-white mb-5 py-4"
                   >
                     <Icon name="plus-circle" className="size-4" />
                     Add a Project
