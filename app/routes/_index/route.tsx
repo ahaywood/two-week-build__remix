@@ -37,7 +37,7 @@ export default function Index() {
 
   return (
     <>
-      <header className="p-page md:mb-12">
+      <header className="p-page md:mb-12 pt-[80px] md:pt-0">
         <h1 className="uppercase text-[90px] md:text-[132px] leading-[80px] md:leading-[114px] text-springBud mb-8">
           Two
           <br />
