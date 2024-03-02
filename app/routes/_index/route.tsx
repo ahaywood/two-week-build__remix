@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { EditProfileButton } from "~/components/EditProfileButton";
+import { Link, useLoaderData } from "@remix-run/react";
 import Footer from "~/components/Footer";
+import { Icon } from "~/components/Icon";
 import { LoginButton } from "~/components/LoginButton";
 import Newsletter from "~/components/Newsletter";
 import { Search } from "~/components/Search";
@@ -53,14 +53,8 @@ export default function Index() {
         {/* HEADER LINKS */}
         <div className="absolute right-6 top-6 flex items-center gap-3">
           <Search />
-          {data.user?.id ? (
-            <EditProfileButton username="me" />
-          ) : (
-            <>
-              <SignUpButton />
-              <LoginButton isUserLoggedIn={!!data.user} />
-            </>
-          )}
+          <SignUpButton />
+          <LoginButton isUserLoggedIn={!!data.user} />
         </div>
       </header>
 

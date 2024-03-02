@@ -13,6 +13,7 @@ import { LoginButton } from "~/components/LoginButton";
 import { EditProfileButton } from "~/components/EditProfileButton";
 import { constants } from "~/lib/constants";
 import { AddProjectButton } from "./AddProjectButton";
+import { SignUpButton } from "~/components/SignUpButton";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   // get the current Supabase user session
@@ -56,6 +57,7 @@ export default function Index() {
       <div className="hidden absolute right-8 top-8 lg:flex justify-end gap-4">
         <Search />
         <EditProfileButton username={data?.username} />
+        <SignUpButton isUserLoggedIn={!!data?.user?.email} />
         <LoginButton isUserLoggedIn={!!data?.user?.email} />
       </div>
 

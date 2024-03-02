@@ -3,9 +3,14 @@ import { Icon } from "./Icon";
 
 interface SignUpButtonProps {
   callback?: () => void;
+  isUserLoggedIn?: boolean;
 }
 
-const SignUpButton = ({ callback = () => {} }: SignUpButtonProps) => {
+const SignUpButton = ({
+  isUserLoggedIn = false,
+  callback = () => {},
+}: SignUpButtonProps) => {
+  if (isUserLoggedIn) return null;
   return (
     <Link
       to="/register"
