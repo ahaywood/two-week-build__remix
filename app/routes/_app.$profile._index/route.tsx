@@ -12,7 +12,7 @@
 // - link @ to users
 // - link # to tags
 
-import { LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import {
   Link,
   useLoaderData,
@@ -26,7 +26,6 @@ import { UpdateForm } from "~/components/UpdateForm";
 import type { Project, Update as UpdateType, User } from "~/global";
 import { constants } from "~/lib/constants";
 import { createSupabaseServerClient } from "~/supabase.server";
-import { AddUpdateButton } from "../_app/AddUpdateButton";
 import { Icon } from "~/components/Icon";
 
 // Get the auth information for the current user
@@ -141,7 +140,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       },
       user: {
         email: data?.user?.email,
-        ...currentUserResults.data,
+        ...currentUserResults?.data,
       },
     },
   };
