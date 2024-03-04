@@ -181,7 +181,6 @@ export default function Me() {
   const { data } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  console.log({ data, location });
 
   return (
     <>
@@ -199,17 +198,19 @@ export default function Me() {
             />
 
             {/* if this is the logged in user's profile page, then give them buttons to edit their project */}
-            <div className="absolute right-0 bottom-0 flex gap-2">
-              <button className="square-button">
-                <Link
-                  to={`/projects/edit/${data.me.projects[0].id}`}
-                  className="bg-chicago size-8 hover:bg-springBud hover:text-black"
-                >
-                  <Icon name="edit" aria-label="Edit Project" />
-                </Link>
-              </button>
-              {/* MARK - I DON'T THINK I WANT TO GIVE USER'S THE ABILITY TO DELETE THEIR PROJECT */}
-            </div>
+            {`/${data?.user?.username}` === location.pathname && (
+              <div className="absolute right-0 bottom-0 flex gap-2">
+                <button className="square-button">
+                  <Link
+                    to={`/projects/edit/${data.me.projects[0].id}`}
+                    className="bg-chicago size-8 hover:bg-springBud hover:text-black"
+                  >
+                    <Icon name="edit" aria-label="Edit Project" />
+                  </Link>
+                </button>
+                {/* MARK - I DON'T THINK I WANT TO GIVE USER'S THE ABILITY TO DELETE THEIR PROJECT */}
+              </div>
+            )}
           </div>
         )}
 
