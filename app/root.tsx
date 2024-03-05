@@ -63,7 +63,6 @@ export default function App() {
             __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
           }}
         />
-        <script src="https://kwesforms.com/v2/kwes-script.js" defer></script>
       </body>
     </html>
   );

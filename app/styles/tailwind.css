@@ -374,4 +374,16 @@
   .alert {
     @apply px-10 py-4 mb-10 rounded-2xl
   }
+
+  .collapsing-box {
+    @apply relative z-collapsingBox;
+  }
+
+  .collapsing-box:after {
+    @apply absolute w-full h-[100px] mb-10 bottom-0 left-0 right-0 bg-gradient-to-b from-transparent to-licorice content-[''] block z-collapsingBoxOverlay
+  }
+
+  .collapsing-box.expanded:after {
+    @apply bg-none;
+  }
 }

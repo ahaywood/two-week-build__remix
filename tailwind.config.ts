@@ -39,6 +39,9 @@ export default {
         emojiPicker: '9997',
         mobileMenu: '9996',
         hamburger: '9995',
+        collapsingBoxTrigger: '52',
+        collapsingBoxOverlay: '51',
+        collapsingBox: '50',
       }
     },
     fontFamily: {

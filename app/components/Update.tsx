@@ -68,7 +68,7 @@ const Update = ({
           )}
 
           {/* you can't edit or delete an update unless it's yours */}
-          {currentUser.id === user.id && (
+          {currentUser?.id === user?.id && (
             <div className="flex flex-col gap-2 absolute right-0 md:-right-[42px] top-0">
               {/* edit button */}
               <button
@@ -138,10 +138,10 @@ const Update = ({
         {/* BIO */}
         {isBioShowing && (
           <div className="bg-licorice p-3 mb-10 relative flex items-center gap-5">
-            <Avatar alt={user.name} size="72px" src={user.avatar} />
+            <Avatar alt={user?.name} size="72px" src={user?.avatar} />
             <div>
               <Link
-                to={`/${user.username}`}
+                to={`/${user?.username}`}
                 className="text-chicago text-2xl mb-1 !border-b-0 no-underline"
               >
                 <strong className="text-springBud font-bold">
