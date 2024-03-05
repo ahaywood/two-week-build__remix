@@ -21,7 +21,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // get all the updates
   const AllUpdatesResults = await supabase
     .from("updates")
-    .select("*, projects(*, users(*)), comments(*, users(*)), emojis(*)");
+    .select("*, projects(*, users(*)), comments(*, users(*)), emojis(*)")
+    .order("created_at", { ascending: false });
   if (AllUpdatesResults.error) throw AllUpdatesResults.error;
 
   // cycle back through all the updates and get the emojis for each update
@@ -40,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     })
   );
 
-  return { data: updatesWithEmojis, currentUserId };
+  return { updatesWithEmojis, currentUserId };
 }
 
 /** -------------------------------------------------
@@ -61,13 +62,13 @@ export const meta: MetaFunction = () => {
 * COMPONENT
 ---------------------------------------------------- */
 export default function AllUpdates() {
-  const { data, currentUserId } = useLoaderData<typeof loader>();
+  const { updatesWithEmojis, currentUserId } = useLoaderData<typeof loader>();
 
   return (
     <>
       <UpdateHeader />
       <div className="page-grid gap-y-[140px]">
-        {data.map((update) => (
+        {updatesWithEmojis.map((update) => (
           <Update
             key={update.id}
             isBioShowing={true}
