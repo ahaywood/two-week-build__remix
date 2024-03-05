@@ -151,10 +151,7 @@ const Update = ({
               </Link>
               <div>
                 I&apos;m building{" "}
-                <Link to={`/profile/${user.username}`}>
-                  {update?.projects?.name}
-                </Link>
-                .
+                <Link to={`/${user.username}`}>{update?.projects?.name}</Link>.
               </div>
             </div>
           </div>
