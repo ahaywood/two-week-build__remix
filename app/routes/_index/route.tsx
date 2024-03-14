@@ -53,6 +53,7 @@ export default function Index() {
         <div className="absolute right-6 top-6 flex items-center gap-3">
           <Search />
           <SignUpButton />
+          <LoginButton isUserLoggedIn={false} />
           <LoginButton isUserLoggedIn={!!data.user} />
         </div>
       </header>
