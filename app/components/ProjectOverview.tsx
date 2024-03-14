@@ -38,7 +38,7 @@ const ProjectOverview = ({
         </a>
       )}
       <div
-        className={`collapsing-box bg-licorice pt-5 pb-10 px-8 flex-1 overflow-x-hidden ${
+        className={`collapsing-box bg-licorice pt-5 pb-10 px-8 flex-1 overflow-y-hidden overflow-x-hidden ${
           !isCollapsed ? "expanded" : ""
         }`}
       >
@@ -78,10 +78,7 @@ const ProjectOverview = ({
             </div>
           </div>
           <h2 className="font-sans font-bold text-lg md:text-2xl">
-            <Link
-              to={`/${user.username}/${project?.id}`}
-              className="hover:text-springBud"
-            >
+            <Link to={`/${user.username}}`} className="hover:text-springBud">
               {project?.name && project.name}
             </Link>
           </h2>
