@@ -39,7 +39,11 @@ const Comment = ({
         }`}
       >
         <div className="absolute -left-[90px] -top-2">
-          <Avatar size="56px" alt="A" />
+          <Avatar
+            src={comment?.users?.avatar}
+            size="56px"
+            alt={comment?.users?.name as string}
+          />
         </div>
         <div>
           <div

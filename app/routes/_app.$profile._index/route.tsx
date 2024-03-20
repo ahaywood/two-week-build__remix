@@ -51,7 +51,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const result = await supabase
     .from("users")
     .select(
-      "*, projects(*, updates(*, comments(*, users(id, name, username))))"
+      "*, projects(*, updates(*, comments(*, users(id, avatar, name, username))))"
     )
     // ! TODO: Need to make sure this works if I introduce pagination
     .order("created_at", {
