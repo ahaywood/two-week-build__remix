@@ -1,11 +1,29 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { Avatar } from "~/components/Avatar";
 import Footer from "~/components/Footer";
 import { LoginButton } from "~/components/LoginButton";
 import Newsletter from "~/components/Newsletter";
 import { Search } from "~/components/Search";
 import { SignUpButton } from "~/components/SignUpButton";
 import { createSupabaseServerClient } from "~/supabase.server";
+
+/** -------------------------------------------------
+* LOADER
+---------------------------------------------------- */
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // Determine whether the user is logged in or not
+  const supabase = createSupabaseServerClient(request);
+  const { data, error } = await supabase.auth.getUser();
+  if (error) console.error(error);
+
+  // Get all the avatars for all the users
+  const users = await supabase
+    .from("users")
+    .select("id, username, avatar, name");
+
+  return { data: { data, users } };
+};
 
 /** -------------------------------------------------
 * META DATA
@@ -23,16 +41,10 @@ export const meta: MetaFunction = () => {
 /** -------------------------------------------------
 * COMPONENT
 ---------------------------------------------------- */
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  // Determine whether the user is logged in or not
-  const supabase = createSupabaseServerClient(request);
-  const { data, error } = await supabase.auth.getUser();
-  if (error) console.error(error);
-  return { data };
-};
-
 export default function Index() {
-  const { data } = useLoaderData<typeof loader>();
+  const {
+    data: { data, users },
+  } = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -59,9 +71,9 @@ export default function Index() {
       </header>
 
       <section className="bg-springBud px-page py-10">
-        <h3 className="uppercase text-2xl mb-0 text-black">Cohort 1</h3>
+        <h3 className="uppercase text-2xl mb-0 text-black">Cohort 2</h3>
         <h2 className="text-black leading-none text-[8.6vw]">
-          March 1 - 14, 2024
+          April 1 - 14, 2024
         </h2>
       </section>
 
@@ -92,23 +104,22 @@ export default function Index() {
         </ol>
       </section>
 
-      {/* <section className="px-page py-10">
-    <h2 className="text-6xl leading-none mb-3 text-white">Join Us</h2>
-    <div className="flex flex-wrap gap-3">
-      {
-        data.map((participant) => (
-          <a href={`/${participant.username}`}>
-            <Avatar
-              className="border-2 border-white"
-              size="72px"
-              avatar={participant.avatar}
-              alt="Amy"
-            />
-          </a>
-        ))
-      }
-    </div>
-    </section> */}
+      <section className="px-page py-10">
+        <h2 className="text-6xl leading-none mb-3 text-white">Join Us</h2>
+        <div className="flex flex-wrap gap-3">
+          {users.data &&
+            users.data.map((participant) => (
+              <a href={`/${participant.username}`} key={participant.id}>
+                <Avatar
+                  className="border-2 border-white"
+                  size="72px"
+                  src={participant.avatar}
+                  alt={participant.name}
+                />
+              </a>
+            ))}
+        </div>
+      </section>
 
       <section className="border-t-[3px] border-t-mineShaft pt-[100px] text-center px-5 md:px-0">
         <Newsletter />
