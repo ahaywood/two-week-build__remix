@@ -1,4 +1,9 @@
 {
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#000000",
+    "titleBar.activeBackground": "#9dff00",
+    "titleBar.activeForeground": "#000000"
+  },
   "cSpell.words": [
     "Autosize",
     "dompurify",
