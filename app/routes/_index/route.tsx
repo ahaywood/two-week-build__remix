@@ -72,7 +72,7 @@ export default function Index() {
       <section className="bg-springBud px-page py-10">
         <h3 className="uppercase text-2xl mb-0 text-black">Cohort 2</h3>
         <h2 className="text-black leading-none text-[8.6vw]">
-          April 1 - 14, 2024
+          May 1 - 14, 2024
         </h2>
       </section>
 
