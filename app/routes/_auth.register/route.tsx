@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Form, MetaFunction } from "@remix-run/react";
+import { Form, MetaFunction, useActionData } from "@remix-run/react";
 import { Icon } from "~/components/Icon";
 import { constants } from "~/lib/constants";
 import { ActionFunctionArgs, json, redirect } from "@remix-run/node";
@@ -110,8 +110,17 @@ export const meta: MetaFunction = () => {
 * COMPONENT
 ---------------------------------------------------- */
 export default function RegisterPage() {
+  // check for error messages
+  const formResults = useActionData<typeof action>();
+
   const inputForm = useRef<HTMLFormElement>(null);
   const firstField = useRef<HTMLInputElement>(null);
+  const errorMessage = useRef<HTMLInputElement>(null);
+
+  // if there's an error, scroll to the error message
+  if (formResults?.error) {
+    errorMessage.current?.scrollIntoView({ behavior: "smooth" });
+  }
 
   return (
     <>
@@ -121,6 +130,16 @@ export default function RegisterPage() {
         for an account below. This will set up your profile page for posting
         updates.
       </p>
+
+      {formResults?.error && (
+        <div
+          className="bg-red-500 text-white mb-10 py-4 px-5 rounded-sm"
+          ref={errorMessage}
+        >
+          <div className="font-bold text-xl">Whoops!</div>
+          <div className="text-base font-sans">{formResults.error}</div>
+        </div>
+      )}
 
       <Form method="post" className="mb-20" ref={inputForm}>
         <div className="field">
