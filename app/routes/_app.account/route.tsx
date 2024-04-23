@@ -69,12 +69,6 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ error: "The email is required.", ok: false });
   }
 
-  // if the user tried to update their password, make sure they entered it twice
-  if (formData.get("password") !== formData.get("confirmPassword")) {
-    console.error("Passwords do not match.");
-    return json({ error: "Passwords do not match.", ok: false });
-  }
-
   const supabase = createSupabaseServerClient(request);
 
   // if the user tried to change their username, make sure it's unique
@@ -83,7 +77,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const { data, error } = await supabase
       .from("users")
       .select("username")
-      .eq("id", formData.get("id") as string)
+      .eq("username", formData.get("username") as string)
       .single();
     if (error) {
       console.error(error);

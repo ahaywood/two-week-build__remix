@@ -15,6 +15,7 @@ import Banner from "~/components/Banner";
 import { Icon } from "~/components/Icon";
 import { useAutosizeTextArea } from "~/hooks/useTextareaAutosize";
 import { constants } from "~/lib/constants";
+import { currentMonth, currentYear } from "~/lib/dateHelpers";
 import { createSupabaseServerClient } from "~/supabase.server";
 
 /** -------------------------------------------------
@@ -69,12 +70,21 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // if there's no user, redirect to the login page
   if (data.user === null) return redirect("/login");
 
+  // get the current cohort info
+  const currentCohort = await supabase
+    .from("cohorts")
+    .select("id")
+    .eq("year", currentYear)
+    .eq("month", currentMonth)
+    .single();
+  if (currentCohort.error) console.error(currentCohort.error);
+
   // get the current user Id, also check to see if they already have a project set up
-  // TODO - Check for the current cohort. The user may want to participate in more than one cohort
   const currentUserResults = await supabase
     .from("users")
     .select("id, projects(id)")
     .eq("auth_id", data.user.id)
+    .eq("projects.cohort_id", currentCohort?.data?.id)
     .single();
   if (currentUserResults.error) console.error(currentUserResults.error);
 
@@ -83,17 +93,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/me");
   }
 
-  // get the current cohort id
-  // TODO: I'm not sure that ascending: false is correct. Will need to confirm when there are more cohorts
-  const cohortResults = await supabase
-    .from("cohorts")
-    .select("id")
-    .order("start_date", { ascending: false })
-    .single();
-  if (cohortResults.error) console.error(cohortResults.error);
-
   return {
-    cohortId: cohortResults?.data?.id,
+    cohortId: currentCohort?.data?.id,
     currentUser: currentUserResults.data?.id,
   };
 }

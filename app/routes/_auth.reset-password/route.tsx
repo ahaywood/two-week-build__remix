@@ -68,7 +68,7 @@ export default function ResetPassword() {
     const confirmPassword = formData.get("confirmPassword") as string;
 
     if (password !== confirmPassword) {
-      return json({ error: "Passwords do not match", ok: false });
+      return setErrorMessage("Passwords do not match");
     }
 
     // update the password

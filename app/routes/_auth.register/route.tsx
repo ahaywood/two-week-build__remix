@@ -50,7 +50,6 @@ export async function action({ request }: ActionFunctionArgs) {
     console.error(authResults.error);
     return json({ error: authResults.error.message, ok: false });
   }
-  console.log({ user: authResults.data.user });
 
   // create a user profile
   const userProfileResults = await supabase
@@ -85,8 +84,6 @@ export async function action({ request }: ActionFunctionArgs) {
     }
     return json({ error: userProfileResults.error.message, ok: false });
   }
-
-  // TODO: User will need to confirm their account via email
 
   // redirect the user to create their project
   return redirect(`/thank-you`);

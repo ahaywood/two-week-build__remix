@@ -1,6 +1,5 @@
 import { Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import Footer from "~/components/Footer";
-import Newsletter from "~/components/Newsletter";
 import { MyAccountMenu } from "./MyAccountMenu";
 import { Search } from "~/components/Search";
 import { createSupabaseServerClient } from "~/supabase.server";
@@ -14,6 +13,7 @@ import { EditProfileButton } from "~/components/EditProfileButton";
 import { constants } from "~/lib/constants";
 import { AddProjectButton } from "./AddProjectButton";
 import { SignUpButton } from "~/components/SignUpButton";
+import { currentMonth, currentYear } from "~/lib/dateHelpers";
 
 /** -------------------------------------------------
 * LOADER
@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     // get the details for the current, logged in user
     result = await supabase
       .from("users")
-      .select("name, username, avatar, projects(id)")
+      .select("name, username, avatar, projects(id, cohorts(id, year, month))")
       .eq("auth_id", data.user.id)
       .single();
   }
@@ -60,6 +60,17 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const { data } = useLoaderData<typeof loader>();
   const location = useLocation();
+
+  const projectInCurrentCohort = (projects) => {
+    if (projects) {
+      return !!projects.find(
+        (project) =>
+          project.cohorts.year === currentYear &&
+          project.cohorts.month === currentMonth
+      );
+    }
+    return false;
+  };
 
   return (
     <div className="bg-arrowLeft bg-no-repeat">
@@ -101,7 +112,8 @@ export default function Index() {
           {/* bottom navigation */}
           {data?.user?.email && (
             <div className="p-3 hidden lg:block">
-              {data?.projects?.length < 1 ? (
+              {data?.projects?.length < 1 ||
+              !projectInCurrentCohort(data.projects) ? (
                 <AddProjectButton />
               ) : (
                 <AddUpdateButton currentUsername={data?.username} />

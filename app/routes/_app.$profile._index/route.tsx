@@ -47,13 +47,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   // get all of the data for the user with this slug
+  // ! TODO: Need to make sure this works if I introduce pagination
   const username = params.profile as string;
   const result = await supabase
     .from("users")
     .select(
       "*, projects(*, updates(*, comments(*, users(id, avatar, name, username))))"
     )
-    // ! TODO: Need to make sure this works if I introduce pagination
     .order("created_at", {
       referencedTable: "projects.updates",
       ascending: true, // this actually puts the oldest first because I'm reordering them with CSS
